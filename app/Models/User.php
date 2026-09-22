@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -50,5 +51,20 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function devices(): HasMany
+    {
+    return $this->hasMany(Device::class);
+    }
+
+    public function repairRequests(): HasMany
+    {
+    return $this->hasMany(RepairRequest::class);
+    }
+
+    public function repairHistories(): HasMany
+    {
+    return $this->hasMany(RepairHistory::class, 'created_by');
     }
 }
