@@ -40,13 +40,11 @@
         <p>No repair orders yet.</p>
       </div>
     </div>
-
     <div style="margin-top: 32px;">
-      <a href="#" class="btn -primary">Submit a Repair</a>
-      <span style="color: var(--text-faint); font-size: 13px; margin-left: 12px;">(coming soon)</span>
+      <a href="{{ route('repairs.create') }}" class="btn -primary">Submit a Repair</a>
+      <a href="{{ route('repairs.index') }}" class="btn -secondary">View Repair History</a>
     </div>
   </div>
 </section>
-
 </body>
 </html>

@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'index')->name('home');
 
+Route::get('/device/{device_code}', [DeviceController::class, 'publicShow'])
+    ->name('devices.public-show');
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes
@@ -91,7 +94,23 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard', [
-        'totalUsers' => User::count(),
+        'totalUsers' => User::where('role', 'user')->count(),
+
+        'activeRepairs' => \App\Models\RepairRequest::whereNotIn('status', [
+            'completed',
+            'rejected',
+            'cancelled',
+        ])->count(),
+
+        'completedRepairs' => \App\Models\RepairRequest::where(
+            'status',
+            'completed'
+        )->count(),
+
+        'totalTransactions' => \App\Models\Payment::where(
+            'status',
+            'paid'
+        )->count(),
     ]);
 })->middleware(['auth', 'role:admin'])->name('admin.dashboard');
 

@@ -32,34 +32,59 @@ class RepairRequestController extends Controller
     }
 
     public function updateStatus(
-        Request $request,
-        RepairRequest $repair
-    ): RedirectResponse {
-        $validated = $request->validate([
-            'status' => [
-                'required',
-                'in:pending,confirmed,diagnosing,repairing,waiting_payment,paid,completed,rejected,cancelled',
-            ],
-            'note' => ['nullable', 'string', 'max:5000'],
-            'estimated_cost' => ['nullable', 'numeric', 'min:0'],
-            'final_cost' => ['nullable', 'numeric', 'min:0'],
-        ]);
+    Request $request,
+    RepairRequest $repair
+): RedirectResponse {
+    $validated = $request->validate([
+        'status' => [
+            'required',
+            'in:pending,confirmed,diagnosing,repairing,waiting_payment,paid,completed,rejected,cancelled',
+        ],
+        'note' => ['nullable', 'string', 'max:5000'],
+        'estimated_cost' => ['nullable', 'numeric', 'min:0'],
+        'final_cost' => ['nullable', 'numeric', 'min:0'],
+    ]);
 
-        $repair->update([
-            'status' => $validated['status'],
-            'estimated_cost' => $validated['estimated_cost'] ?? $repair->estimated_cost,
-            'final_cost' => $validated['final_cost'] ?? $repair->final_cost,
-        ]);
+    $currentStatus = $repair->status;
+    $newStatus = $validated['status'];
 
-        $repair->repairHistories()->create([
-            'status' => $validated['status'],
-            'note' => $validated['note'] ?? null,
-            'created_by' => auth()->id(),
-        ]);
+    $allowedTransitions = [
+        'pending' => ['confirmed', 'rejected', 'cancelled'],
+        'confirmed' => ['diagnosing', 'rejected', 'cancelled'],
+        'diagnosing' => ['repairing', 'rejected', 'cancelled'],
+        'repairing' => ['waiting_payment', 'rejected', 'cancelled'],
+        'waiting_payment' => ['paid', 'rejected', 'cancelled'],
+        'paid' => ['completed'],
+        'completed' => [],
+        'rejected' => [],
+        'cancelled' => [],
+    ];
 
-        return redirect()
-            ->route('admin.repairs.show', $repair)
-            ->with('success', 'Repair status berhasil diperbarui.');
+    if (
+        $newStatus !== $currentStatus &&
+        ! in_array($newStatus, $allowedTransitions[$currentStatus] ?? [], true)
+    ) {
+        return back()->withErrors([
+            'status' => "Status tidak dapat diubah dari {$currentStatus} menjadi {$newStatus}.",
+        ]);
+    }
+
+    $repair->update([
+        'status' => $newStatus,
+        'estimated_cost' => $validated['estimated_cost'] ?? $repair->estimated_cost,
+        'final_cost' => $validated['final_cost'] ?? $repair->final_cost,
+    ]);
+
+    $repair->repairHistories()->create([
+        'status' => $newStatus,
+        'note' => $validated['note'] ?? null,
+        'created_by' => auth()->id(),
+    ]);
+
+    return redirect()
+        ->route('admin.repairs.show', $repair)
+        ->with('success', 'Repair status berhasil diperbarui.');
+
     }
     public function createInvoice(RepairRequest $repair): RedirectResponse
     {

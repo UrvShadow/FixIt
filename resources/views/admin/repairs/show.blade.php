@@ -93,33 +93,36 @@
                 </label>
 
                 <select
-                    id="status"
-                    name="status"
-                    required
-                >
+    id="status"
+    name="status"
+    required
+>
+    @php
+        $allowedTransitions = [
+            'pending' => ['confirmed', 'rejected', 'cancelled'],
+            'confirmed' => ['diagnosing', 'rejected', 'cancelled'],
+            'diagnosing' => ['repairing', 'rejected', 'cancelled'],
+            'repairing' => ['waiting_payment', 'rejected', 'cancelled'],
+            'waiting_payment' => ['paid', 'rejected', 'cancelled'],
+            'paid' => ['completed'],
+            'completed' => [],
+            'rejected' => [],
+            'cancelled' => [],
+        ];
 
-                    @foreach ([
-                        'pending',
-                        'confirmed',
-                        'diagnosing',
-                        'repairing',
-                        'waiting_payment',
-                        'paid',
-                        'completed',
-                        'rejected',
-                        'cancelled'
-                    ] as $status)
+        $nextStatuses = $allowedTransitions[$repair->status] ?? [];
+    @endphp
 
-                        <option
-                            value="{{ $status }}"
-                            {{ $repair->status === $status ? 'selected' : '' }}
-                        >
-                            {{ ucfirst(str_replace('_', ' ', $status)) }}
-                        </option>
+    <option value="{{ $repair->status }}" selected>
+        {{ ucfirst(str_replace('_', ' ', $repair->status)) }}
+    </option>
 
-                    @endforeach
-
-                </select>
+    @foreach ($nextStatuses as $status)
+        <option value="{{ $status }}">
+            {{ ucfirst(str_replace('_', ' ', $status)) }}
+        </option>
+    @endforeach
+</select>
             </div>
 
             <br>

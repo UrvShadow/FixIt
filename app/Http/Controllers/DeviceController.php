@@ -16,6 +16,20 @@ class DeviceController extends Controller
         return view('devices.index', compact('devices'));
     }
 
+    public function publicShow(string $device_code): View
+    {
+    $device = Device::where('device_code', $device_code)
+        ->with([
+            'repairRequests' => function ($query) {
+                $query->with('repairHistories')
+                    ->latest();
+            },
+        ])
+        ->firstOrFail();
+
+    return view('devices.public-show', compact('device'));
+    }
+
     public function create(): View
     {
         return view('devices.create');

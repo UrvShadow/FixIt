@@ -32,20 +32,27 @@
         <p style="font-size: 28px; color: var(--text);">{{ $totalUsers }}</p>
       </div>
       <div class="svc-card">
-        <h3>Active repairs</h3>
-        <p style="font-size: 28px; color: var(--text);">0</p>
-      </div>
-      <div class="svc-card">
-        <h3>Completed repairs</h3>
-        <p style="font-size: 28px; color: var(--text);">0</p>
-      </div>
-      <div class="svc-card">
-        <h3>Transactions</h3>
-        <p style="font-size: 28px; color: var(--text);">0</p>
-      </div>
+    <h3>Active repairs</h3>
+    <p style="font-size: 28px; color: var(--text);">
+        {{ $activeRepairs }}
+    </p>
+</div>
+
+<div class="svc-card">
+    <h3>Completed repairs</h3>
+    <p style="font-size: 28px; color: var(--text);">
+        {{ $completedRepairs }}
+    </p>
+</div>
+
+<div class="svc-card">
+    <h3>Transactions</h3>
+    <p style="font-size: 28px; color: var(--text);">
+        {{ $totalTransactions }}
+    </p>
+</div>
     </div>
   </div>
 </section>
-
 </body>
 </html>

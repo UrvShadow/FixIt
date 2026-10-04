@@ -38,9 +38,19 @@ class PaymentController extends Controller
         ]);
 
         $invoice->update([
-            'status' => 'paid',
-            'paid_at' => now(),
-        ]);
+    'status' => 'paid',
+    'paid_at' => now(),
+]);
+
+$invoice->repairRequest->update([
+    'status' => 'paid',
+]);
+
+$invoice->repairRequest->repairHistories()->create([
+    'status' => 'paid',
+    'note' => 'Payment received for invoice ' . $invoice->invoice_number . '.',
+    'created_by' => auth()->id(),
+]);
 
         return back()->with('success', 'Pembayaran berhasil dicatat.');
     }

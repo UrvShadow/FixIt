@@ -1,74 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Devices - FixIT</title>
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
+
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>My Devices</h1>
+    <h1>My Devices</h1>
 
-        <p>
-            Welcome, {{ auth()->user()->name }}
-        </p>
+    <p>
+        Welcome, {{ auth()->user()->name }}
+    </p>
 
-        @if (session('success'))
+    @if (session('success'))
+        <div>
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <a href="{{ route('devices.create') }}">
+        + Add Device
+    </a>
+
+    <hr>
+
+    @forelse ($devices as $device)
+
+        <div>
+
+            <h2>{{ $device->name }}</h2>
+
+            <p>
+                Device Code: {{ $device->device_code }}
+            </p>
+
+            <p>
+                Category: {{ $device->category }}
+            </p>
+
+            <p>
+                Brand: {{ $device->brand }}
+            </p>
+
+            @if ($device->model)
+                <p>
+                    Model: {{ $device->model }}
+                </p>
+            @endif
+
+            @if ($device->serial_number)
+                <p>
+                    Serial Number: {{ $device->serial_number }}
+                </p>
+            @endif
+
+            @if ($device->description)
+                <p>
+                    Description: {{ $device->description }}
+                </p>
+            @endif
+
+            <hr>
+
+            <h3>Device QR Code</h3>
+
             <div>
-                {{ session('success') }}
+                {!! QrCode::size(200)->generate(
+                    route('devices.public-show', $device->device_code)
+                ) !!}
             </div>
-        @endif
 
-        <a href="{{ route('devices.create') }}">
-            + Add Device
-        </a>
+            <p>
+                Scan QR code untuk melihat informasi device dan repair history.
+            </p>
 
-        <hr>
+        </div>
 
-        @forelse ($devices as $device)
-
-            <div>
-                <h2>{{ $device->name }}</h2>
-
-                <p>
-                    Device Code: {{ $device->device_code }}
-                </p>
-
-                <p>
-                    Category: {{ $device->category }}
-                </p>
-
-                <p>
-                    Brand: {{ $device->brand }}
-                </p>
-
-                @if ($device->model)
-                    <p>
-                        Model: {{ $device->model }}
-                    </p>
-                @endif
-
-                @if ($device->serial_number)
-                    <p>
-                        Serial Number: {{ $device->serial_number }}
-                    </p>
-                @endif
-
-                @if ($device->description)
-                    <p>
-                        Description: {{ $device->description }}
-                    </p>
-                @endif
-            </div>
         <a href="{{ route('devices.edit', $device) }}">
             Edit
         </a>
 
-        </form
+        <form
             action="{{ route('devices.destroy', $device) }}"
             method="POST"
             style="display: inline;"
@@ -77,25 +97,27 @@
             @csrf
             @method('DELETE')
 
-    <button type="submit">
-        Delete
-    </button>
-</form>
-            <hr>
+            <button type="submit">
+                Delete
+            </button>
+        </form>
 
-        @empty
+        <hr>
 
-            <p>
-                You don't have any registered devices yet.
-            </p>
+    @empty
 
-        @endforelse
+        <p>
+            You don't have any registered devices yet.
+        </p>
 
-        <a href="{{ route('dashboard') }}">
-            ← Back to Dashboard
-        </a>
+    @endforelse
 
-    </div>
+    <a href="{{ route('dashboard') }}">
+        ← Back to Dashboard
+    </a>
+
+</div>
 
 </body>
+
 </html>
