@@ -4,97 +4,238 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Device {{ $device->device_code }} - FixIT</title>
+    <title>{{ $device->name }} — FixIT</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
 <body>
 
-<div class="container">
+    {{-- Public Navbar --}}
+    <header class="nav">
+        <div class="container">
 
-    <h1>Device Information</h1>
+            <a href="{{ route('home') }}" class="brand">
+                <span class="mark">FX</span>FixIT
+            </a>
 
-    <p>
-        <strong>Device Code:</strong>
-        {{ $device->device_code }}
-    </p>
+            <div class="public-label">
+                Public Device Record
+            </div>
 
-    <p>
-        <strong>Name:</strong>
-        {{ $device->name }}
-    </p>
+        </div>
+    </header>
 
-    <p>
-        <strong>Category:</strong>
-        {{ $device->category }}
-    </p>
+    {{-- Device Record --}}
+    <section>
 
-    <p>
-        <strong>Brand:</strong>
-        {{ $device->brand }}
-    </p>
+        <div class="container">
 
-    <p>
-        <strong>Model:</strong>
-        {{ $device->model ?? '-' }}
-    </p>
+            <div class="public-device-header">
 
-    <p>
-        <strong>Serial Number:</strong>
-        {{ $device->serial_number ?? '-' }}
-    </p>
+                <div>
+                    <div class="section-tag">
+                        Device Record
+                    </div>
 
-    @if ($device->description)
-        <p>
-            <strong>Description:</strong>
-            {{ $device->description }}
-        </p>
-    @endif
+                    <h1>
+                        {{ $device->name }}
+                    </h1>
 
-    <hr>
-
-    <h2>Repair History</h2>
-
-    @forelse ($device->repairRequests as $repair)
-
-        <div>
-            <h3>
-                Repair #{{ $repair->id }}
-            </h3>
-
-            <p>
-                <strong>Issue:</strong>
-                {{ $repair->issue }}
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                {{ ucfirst(str_replace('_', ' ', $repair->status)) }}
-            </p>
-
-            @if ($repair->repairHistories->count())
-                <h4>History</h4>
-
-                @foreach ($repair->repairHistories as $history)
                     <p>
-                        {{ ucfirst(str_replace('_', ' ', $history->status)) }}
-                        —
-                        {{ $history->created_at->format('d M Y H:i') }}
+                        {{ $device->category }}
+                        ·
+                        {{ $device->brand }}
+
+                        @if ($device->model)
+                            · {{ $device->model }}
+                        @endif
                     </p>
-                @endforeach
+                </div>
+
+                <div class="public-device-code">
+                    <span>Device ID</span>
+
+                    <strong class="ticket-code">
+                        {{ $device->device_code }}
+                    </strong>
+                </div>
+
+            </div>
+
+            {{-- Device Information --}}
+            <div class="public-device-info">
+
+                <div class="section-tag">
+                    Device Information
+                </div>
+
+                <div class="public-info-grid">
+
+                    <div>
+                        <span>Category</span>
+                        <strong>{{ $device->category }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Brand</span>
+                        <strong>{{ $device->brand }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Model</span>
+                        <strong>{{ $device->model ?? '-' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Serial Number</span>
+                        <strong>{{ $device->serial_number ?? '-' }}</strong>
+                    </div>
+
+                </div>
+
+                @if ($device->description)
+
+                    <div class="public-description">
+
+                        <span>Description</span>
+
+                        <p>
+                            {{ $device->description }}
+                        </p>
+
+                    </div>
+
+                @endif
+
+            </div>
+
+            {{-- Repair History --}}
+            <div class="public-repair-history">
+
+                <div class="section-head">
+
+                    <div class="section-tag">
+                        Service Record
+                    </div>
+
+                    <h2>
+                        Repair History
+                    </h2>
+
+                    <p>
+                        Recorded repair activity associated with this device.
+                    </p>
+
+                </div>
+
+                @forelse ($device->repairRequests as $repair)
+
+                    <article class="public-repair-card">
+
+                        <div class="public-repair-header">
+
+                            <div>
+
+                                <span class="ticket-code">
+                                    REPAIR #{{ $repair->id }}
+                                </span>
+
+                                <h3>
+                                    {{ $repair->issue }}
+                                </h3>
+
+                            </div>
+
+                            <span class="status-badge status-{{ $repair->status }}">
+                                {{ ucfirst(str_replace('_', ' ', $repair->status)) }}
+                            </span>
+
+                        </div>
+
+                        @if ($repair->repairHistories->count())
+
+                            <div class="repair-timeline">
+
+                                @php
+    $lastHistory = $repair->repairHistories->last();
+@endphp
+
+@foreach ($repair->repairHistories as $history)
+
+    @php
+        $isLast = $lastHistory
+            && $history->id === $lastHistory->id;
+
+        $isFailed = in_array($history->status, [
+            'rejected',
+            'cancelled',
+        ]);
+
+        $isCompleted = !$isLast || $history->status === 'completed';
+
+        $timelineClass = $isFailed
+            ? '-failed'
+            : ($isCompleted ? '-completed' : '-active');
+    @endphp
+
+    <div class="timeline-item {{ $timelineClass }}">
+
+        <div class="timeline-marker">
+
+            @if ($isFailed)
+                ×
+            @elseif ($isCompleted)
+                ✓
+            @else
+                ●
             @endif
+
         </div>
 
-        <hr>
+        <div class="timeline-content">
 
-    @empty
+            <strong>
+                {{ ucfirst(str_replace('_', ' ', $history->status)) }}
+            </strong>
 
-        <p>No repair history found.</p>
+            <span>
+                {{ $history->created_at->format('d M Y H:i') }}
+            </span>
 
-    @endforelse
+        </div>
 
-</div>
+    </div>
+
+@endforeach
+                            </div>
+
+                        @endif
+
+                    </article>
+
+                @empty
+
+                    <div class="empty-state">
+
+                        <h3>
+                            No repair history
+                        </h3>
+
+                        <p>
+                            This device has no recorded repair activity yet.
+                        </p>
+
+                    </div>
+
+                @endforelse
+
+            </div>
+
+        </div>
+
+    </section>
 
 </body>
 </html>
