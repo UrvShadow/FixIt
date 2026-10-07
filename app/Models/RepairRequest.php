@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +16,8 @@ class RepairRequest extends Model
     protected $fillable = [
         'device_id',
         'user_id',
+        'service_id',
+        'preferred_date',
         'issue',
         'status',
         'estimated_cost',
@@ -40,4 +43,13 @@ class RepairRequest extends Model
     {
     return $this->hasOne(Invoice::class);
     }
+
+    public function service(): BelongsTo 
+    { 
+    return $this->belongsTo(Service::class); 
+    }
+
+    protected $casts = [
+        'preferred_date' => 'date',
+    ];
 }

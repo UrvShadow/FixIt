@@ -146,6 +146,7 @@
 
                                 @php
                                     $isLatest = $loop->first;
+
                                     $isFailed = in_array($history->status, [
                                         'rejected',
                                         'cancelled',
@@ -271,8 +272,7 @@
                         </div>
 
 
-                        {{-- Payment State --}}
-
+                        {{-- Invoice --}}
                         @if ($repair->invoice && $repair->invoice->status === 'paid')
 
                             <a
@@ -282,8 +282,11 @@
                             >
                                 Download Invoice PDF
                             </a>
+
                         @endif
 
+
+                        {{-- Payment State --}}
                         @if ($repair->invoice)
 
                             <div class="repair-payment-state">
@@ -331,6 +334,69 @@
                         @endif
 
                     </article>
+
+
+                    {{-- Service Information --}}
+                    @if ($repair->service || $repair->preferred_date)
+
+                        <article class="repair-detail-card">
+
+                            <div class="section-tag">
+                                Booking Information
+                            </div>
+
+                            @if ($repair->service)
+
+                                <div class="repair-booking-info">
+
+                                    <div>
+                                        <span>
+                                            Service
+                                        </span>
+
+                                        <strong>
+                                            {{ $repair->service->name }}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>
+                                            Starting Price
+                                        </span>
+
+                                        <strong>
+                                            Rp {{ number_format($repair->service->starting_price, 0, ',', '.') }}
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+                            @endif
+
+
+                            @if ($repair->preferred_date)
+
+                                <div class="repair-booking-date">
+
+                                    <span>
+                                        Preferred Service Date
+                                    </span>
+
+                                    <strong>
+                                        {{ $repair->preferred_date->format('d M Y') }}
+                                    </strong>
+
+                                    <small>
+                                        Final schedule will be confirmed by our service team.
+                                    </small>
+
+                                </div>
+
+                            @endif
+
+                        </article>
+
+                    @endif
 
 
                     {{-- Device Information --}}

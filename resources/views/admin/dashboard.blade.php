@@ -1,58 +1,607 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — FixIT</title>
-<link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard — FixIT</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ asset('favicon.png') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/style.css') }}"
+    >
+
 </head>
+
 <body>
 
 <header class="nav">
-  <div class="container">
-    <a href="{{ route('home') }}" class="brand"><span class="mark">FX</span>FixIT Admin</a>
-    <form action="{{ route('logout') }}" method="POST">
-      @csrf
-      <button type="submit" class="btn -secondary -sm">Log out</button>
-    </form>
-  </div>
+
+    <div class="container">
+
+        <a
+            href="{{ route('home') }}"
+            class="brand"
+        >
+            <span class="mark">FX</span>
+            FixIT Admin
+        </a>
+
+        <nav class="nav-links">
+
+            <a
+                href="{{ route('admin.dashboard') }}"
+                class="active"
+            >
+                Dashboard
+            </a>
+
+            <a href="{{ route('admin.services.index') }}">
+                Services
+            </a>
+
+            <a href="{{ route('admin.repairs.index') }}">
+                Repairs
+            </a>
+
+        </nav>
+
+        <div class="nav-actions">
+
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+            >
+
+                @csrf
+
+                <button
+                    type="submit"
+                    class="btn -secondary -sm"
+                >
+                    Log out
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </header>
 
-<section>
-  <div class="container">
-    <div class="section-head">
-      <div class="section-tag">Admin dashboard</div>
-      <h2>Welcome, {{ auth()->user()->name }}</h2>
+
+<main>
+
+<section class="admin-dashboard">
+
+    <div class="container">
+
+
+        {{-- Hero --}}
+
+        <div class="admin-dashboard-hero">
+
+            <div>
+
+                <span class="section-tag">
+                    ADMINISTRATION
+                </span>
+
+                <h1>
+                    Welcome back,<br>
+                    {{ auth()->user()->name }}.
+                </h1>
+
+                <p>
+                    Manage services, monitor customer repair requests,
+                    track service progress, and oversee transaction
+                    activity from your FixIT administration panel.
+                </p>
+
+            </div>
+
+
+            <div class="admin-dashboard-status">
+
+                <span class="admin-dashboard-status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        SYSTEM ONLINE
+                    </strong>
+
+                    <small>
+                        FixIT Service Platform
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {{-- Statistics --}}
+
+        <div class="admin-dashboard-stats">
+
+
+            {{-- Users --}}
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-top">
+
+                    <span>
+                        USERS
+                    </span>
+
+                    <span class="admin-stat-index">
+                        01
+                    </span>
+
+                </div>
+
+                <strong class="admin-stat-value">
+                    {{ $totalUsers }}
+                </strong>
+
+                <p>
+                    Registered customers
+                </p>
+
+            </article>
+
+
+            {{-- Services --}}
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-top">
+
+                    <span>
+                        SERVICES
+                    </span>
+
+                    <span class="admin-stat-index">
+                        02
+                    </span>
+
+                </div>
+
+                <strong class="admin-stat-value">
+                    {{ $activeServices }}
+                </strong>
+
+                <p>
+                    Active services in catalog
+                </p>
+
+            </article>
+
+
+            {{-- Active Repairs --}}
+
+            <article class="admin-stat-card admin-stat-active">
+
+                <div class="admin-stat-top">
+
+                    <span>
+                        ACTIVE REPAIRS
+                    </span>
+
+                    <span class="admin-stat-index">
+                        03
+                    </span>
+
+                </div>
+
+                <strong class="admin-stat-value">
+                    {{ $activeRepairs }}
+                </strong>
+
+                <p>
+                    Repairs currently in progress
+                </p>
+
+            </article>
+
+
+            {{-- Completed --}}
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-top">
+
+                    <span>
+                        COMPLETED
+                    </span>
+
+                    <span class="admin-stat-index">
+                        04
+                    </span>
+
+                </div>
+
+                <strong class="admin-stat-value">
+                    {{ $completedRepairs }}
+                </strong>
+
+                <p>
+                    Successfully completed repairs
+                </p>
+
+            </article>
+
+
+            {{-- Transactions --}}
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-top">
+
+                    <span>
+                        TRANSACTIONS
+                    </span>
+
+                    <span class="admin-stat-index">
+                        05
+                    </span>
+
+                </div>
+
+                <strong class="admin-stat-value">
+                    {{ $totalTransactions }}
+                </strong>
+
+                <p>
+                    Recorded paid transactions
+                </p>
+
+            </article>
+
+
+        </div>
+
+
+        {{-- Operations --}}
+
+        <div class="admin-dashboard-grid">
+
+
+            {{-- Operations Panel --}}
+
+            <article class="admin-dashboard-panel admin-dashboard-panel-main">
+
+                <div class="admin-dashboard-panel-head">
+
+                    <div>
+
+                        <span class="section-tag">
+                            OPERATIONS
+                        </span>
+
+                        <h2>
+                            Platform Management
+                        </h2>
+
+                    </div>
+
+                    <span class="admin-panel-code">
+                        FIXIT / OPS
+                    </span>
+
+                </div>
+
+
+                {{-- Service Management --}}
+
+                <div class="admin-dashboard-operation">
+
+                    <div class="admin-operation-number">
+                        01
+                    </div>
+
+                    <div class="admin-operation-content">
+
+                        <h3>
+                            Service Management
+                        </h3>
+
+                        <p>
+                            Create, edit, and control the availability
+                            of repair and maintenance services offered
+                            through the FixIT platform.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ route('admin.services.index') }}"
+                        class="admin-operation-link"
+                    >
+                        Manage
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+                {{-- Repair Requests --}}
+
+                <div class="admin-dashboard-operation">
+
+                    <div class="admin-operation-number">
+                        02
+                    </div>
+
+                    <div class="admin-operation-content">
+
+                        <h3>
+                            Repair Requests
+                        </h3>
+
+                        <p>
+                            Review incoming customer requests,
+                            inspect device information, and manage
+                            repair submissions.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ route('admin.repairs.index') }}"
+                        class="admin-operation-link"
+                    >
+                        Open
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+                {{-- Service Workflow --}}
+
+                <div class="admin-dashboard-operation">
+
+                    <div class="admin-operation-number">
+                        03
+                    </div>
+
+                    <div class="admin-operation-content">
+
+                        <h3>
+                            Service Workflow
+                        </h3>
+
+                        <p>
+                            Manage repairs from confirmation and
+                            diagnosis through repair, payment,
+                            and completion.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ route('admin.repairs.index') }}"
+                        class="admin-operation-link"
+                    >
+                        Manage
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+                {{-- Invoice & Payment --}}
+
+                <div class="admin-dashboard-operation">
+
+                    <div class="admin-operation-number">
+                        04
+                    </div>
+
+                    <div class="admin-operation-content">
+
+                        <h3>
+                            Invoice & Payment
+                        </h3>
+
+                        <p>
+                            Generate invoices after the final repair
+                            cost is determined and monitor recorded
+                            payment status.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ route('admin.repairs.index') }}"
+                        class="admin-operation-link"
+                    >
+                        Review
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+            </article>
+
+
+            {{-- Platform Info --}}
+
+            <aside class="admin-dashboard-panel admin-dashboard-side">
+
+                <div class="admin-dashboard-panel-head">
+
+                    <div>
+
+                        <span class="section-tag">
+                            PLATFORM
+                        </span>
+
+                        <h2>
+                            FixIT
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-platform-block">
+
+                    <span>
+                        SERVICE MODEL
+                    </span>
+
+                    <strong>
+                        Digital Repair Platform
+                    </strong>
+
+                    <p>
+                        FixIT connects customers with electronic
+                        device repair services through digital
+                        service discovery, booking, repair tracking,
+                        invoicing, and payment records.
+                    </p>
+
+                </div>
+
+
+                <div class="admin-platform-block">
+
+                    <span>
+                        CUSTOMER FLOW
+                    </span>
+
+                    <div class="admin-workflow">
+
+                        <span>CATALOG</span>
+
+                        <b>→</b>
+
+                        <span>BOOK</span>
+
+                        <b>→</b>
+
+                        <span>REPAIR</span>
+
+                        <b>→</b>
+
+                        <span>PAY</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-platform-block">
+
+                    <span>
+                        SERVICE STATUS
+                    </span>
+
+                    <div class="admin-workflow">
+
+                        <span>REQUEST</span>
+
+                        <b>→</b>
+
+                        <span>DIAGNOSE</span>
+
+                        <b>→</b>
+
+                        <span>REPAIR</span>
+
+                        <b>→</b>
+
+                        <span>COMPLETE</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-dashboard-note">
+
+                    <span>
+                        ADMIN NOTE
+                    </span>
+
+                    <p>
+                        Keep service information, repair status,
+                        and final cost updated so customers receive
+                        accurate information throughout their
+                        service journey.
+                    </p>
+
+                </div>
+
+            </aside>
+
+
+        </div>
+
+
+        {{-- Quick Access --}}
+
+        <div class="admin-dashboard-cta">
+
+            <div>
+
+                <span class="section-tag">
+                    QUICK ACCESS
+                </span>
+
+                <h2>
+                    Manage your FixIT service catalog
+                </h2>
+
+            </div>
+
+            <div class="admin-dashboard-cta-actions">
+
+                <a
+                    href="{{ route('admin.services.index') }}"
+                    class="btn -secondary"
+                >
+                    Manage Services
+                </a>
+
+                <a
+                    href="{{ route('admin.repairs.index') }}"
+                    class="btn -primary"
+                >
+                    View Repairs →
+                </a>
+
+            </div>
+
+        </div>
+
+
     </div>
 
-    <div class="grid-4">
-      <div class="svc-card">
-        <h3>Total users</h3>
-        <p style="font-size: 28px; color: var(--text);">{{ $totalUsers }}</p>
-      </div>
-      <div class="svc-card">
-    <h3>Active repairs</h3>
-    <p style="font-size: 28px; color: var(--text);">
-        {{ $activeRepairs }}
-    </p>
-</div>
-
-<div class="svc-card">
-    <h3>Completed repairs</h3>
-    <p style="font-size: 28px; color: var(--text);">
-        {{ $completedRepairs }}
-    </p>
-</div>
-
-<div class="svc-card">
-    <h3>Transactions</h3>
-    <p style="font-size: 28px; color: var(--text);">
-        {{ $totalTransactions }}
-    </p>
-</div>
-    </div>
-  </div>
 </section>
+
+</main>
+
 </body>
+
 </html>

@@ -3332,3 +3332,1907 @@ section{ padding: var(--s-8) 0; }
     font-family: var(--font-body);
     font-size: 12px;
 }
+/* ========================================
+   Service Catalog
+   ======================================== */
+
+.service-catalog {
+    padding: var(--s-6) 0 var(--s-8);
+}
+
+.service-catalog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--s-4);
+}
+
+.service-catalog-head h1 {
+    margin: 8px 0 10px;
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+}
+
+.service-catalog-head p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* Grid */
+
+.service-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-2);
+}
+
+
+/* Card */
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    padding: var(--s-3);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.service-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+}
+
+
+/* Card top */
+
+.service-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--border);
+}
+
+.service-card-category,
+.service-card-number {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+}
+
+.service-card-category {
+    color: var(--accent);
+}
+
+.service-card-number {
+    color: var(--text-faint);
+}
+
+
+/* Card body */
+
+.service-card-body {
+    flex: 1;
+    padding: var(--s-3) 0;
+}
+
+.service-card-body h2 {
+    margin: 0 0 10px;
+    font-size: 21px;
+    line-height: 1.2;
+}
+
+.service-card-body p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+
+/* Card footer */
+
+.service-card-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-2);
+    padding-top: var(--s-2);
+    border-top: 1px solid var(--border);
+}
+
+.service-card-price span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.service-card-price strong {
+    display: block;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+.service-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.service-card-link span {
+    color: var(--accent);
+    font-size: 15px;
+    transition: transform 0.2s ease;
+}
+
+.service-card-link:hover span {
+    transform: translateX(3px);
+}
+
+
+/* Empty state */
+
+.service-empty {
+    padding: var(--s-6);
+    text-align: center;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.service-empty h2 {
+    margin: 10px 0 6px;
+    font-size: 22px;
+}
+
+.service-empty p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .service-catalog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .service-catalog {
+        padding: var(--s-4) 0 var(--s-6);
+    }
+
+    .service-catalog-head h1 {
+        font-size: 28px;
+    }
+
+    .service-catalog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card {
+        min-height: 250px;
+    }
+
+    .service-card-footer {
+        align-items: center;
+    }
+}
+/* ========================================
+   Service Detail
+   ======================================== */
+
+.service-detail {
+    padding: var(--s-4) 0 var(--s-8);
+}
+
+.service-detail-back {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: var(--s-4);
+
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-decoration: none;
+}
+
+.service-detail-back:hover {
+    color: var(--text);
+}
+
+
+/* Layout */
+
+.service-detail-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.7fr);
+    gap: var(--s-6);
+    align-items: start;
+}
+
+
+/* Main */
+
+.service-detail-main h1 {
+    max-width: 760px;
+    margin: 8px 0 16px;
+
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+}
+
+.service-detail-description {
+    max-width: 720px;
+    margin: 0;
+
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+
+/* Sections */
+
+.service-detail-section {
+    max-width: 720px;
+    margin-top: var(--s-6);
+    padding-top: var(--s-3);
+
+    border-top: 1px solid var(--border);
+}
+
+.service-detail-label {
+    display: block;
+
+    margin-bottom: 14px;
+
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+}
+
+.service-detail-section > p {
+    margin: 0;
+
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+
+/* Steps */
+
+.service-detail-steps {
+    display: grid;
+    gap: var(--s-2);
+}
+
+.service-detail-step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: var(--s-2);
+
+    padding: var(--s-2);
+
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.service-detail-step > span {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 10px;
+}
+
+.service-detail-step strong {
+    display: block;
+    margin-bottom: 4px;
+
+    color: var(--text);
+    font-size: 12px;
+}
+
+.service-detail-step p {
+    margin: 0;
+
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* Sidebar */
+
+.service-detail-sidebar {
+    position: sticky;
+    top: 24px;
+}
+
+.service-detail-card {
+    padding: var(--s-3);
+
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.service-detail-price {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 25px;
+}
+
+.service-detail-card > p {
+    margin: 0 0 var(--s-3);
+
+    color: var(--text-faint);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.service-detail-book {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.service-detail-login-note {
+    margin-top: 12px !important;
+    margin-bottom: 0 !important;
+    text-align: center;
+}
+
+.service-detail-login-note a {
+    color: var(--text);
+}
+
+
+/* Note */
+
+.service-detail-note {
+    margin-top: var(--s-2);
+    padding: var(--s-2);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.service-detail-note span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+}
+
+.service-detail-note p {
+    margin: 0;
+
+    color: var(--text-faint);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+
+/* Responsive */
+
+@media (max-width: 800px) {
+
+    .service-detail-layout {
+        grid-template-columns: 1fr;
+        gap: var(--s-4);
+    }
+
+    .service-detail-sidebar {
+        position: static;
+    }
+
+    .service-detail-main h1 {
+        font-size: 34px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .service-detail {
+        padding: var(--s-3) 0 var(--s-6);
+    }
+
+    .service-detail-main h1 {
+        font-size: 30px;
+    }
+
+    .service-detail-description {
+        font-size: 12px;
+    }
+
+}
+/* ========================================
+   Selected Service
+   ======================================== */
+
+.repair-selected-service {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2);
+
+    margin-bottom: var(--s-3);
+    padding: var(--s-2);
+
+    background: var(--accent-dim);
+    border: 1px solid rgba(229, 57, 53, 0.25);
+    border-radius: var(--radius-sm);
+}
+
+.repair-selected-service-label {
+    display: block;
+    margin-bottom: 5px;
+
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+}
+
+.repair-selected-service strong {
+    display: block;
+
+    color: var(--text);
+    font-size: 13px;
+}
+
+.repair-selected-service p {
+    margin: 4px 0 0;
+
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 9px;
+}
+
+.repair-selected-service-change {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.repair-selected-service-change:hover {
+    color: var(--text);
+}
+
+@media (max-width: 600px) {
+
+    .repair-selected-service {
+        align-items: flex-start;
+    }
+
+}
+/* ========================================
+   Repair Booking Information
+   ======================================== */
+
+.repair-booking-info {
+    display: grid;
+    gap: var(--s-2);
+}
+
+.repair-booking-info > div,
+.repair-booking-date {
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--border);
+}
+
+.repair-booking-info span,
+.repair-booking-date span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.repair-booking-info strong,
+.repair-booking-date strong {
+    display: block;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.repair-booking-date {
+    margin-top: var(--s-2);
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.repair-booking-date small {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-faint);
+    font-size: 9px;
+    line-height: 1.5;
+}
+/* ========================================
+   Admin Repair Detail
+   ======================================== */
+
+.admin-repair-back {
+    margin: var(--s-3) 0 var(--s-3);
+}
+
+.admin-repair-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-bottom: var(--s-4);
+}
+
+.admin-repair-head h1 {
+    margin: 8px 0 4px;
+    font-size: 34px;
+    line-height: 1.1;
+}
+
+.admin-repair-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.75fr);
+    gap: var(--s-3);
+    align-items: start;
+}
+
+.admin-repair-main,
+.admin-repair-sidebar {
+    display: grid;
+    gap: var(--s-3);
+}
+
+.admin-repair-sidebar {
+    position: sticky;
+    top: 24px;
+}
+
+.admin-repair-card {
+    padding: var(--s-3);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-repair-card h2 {
+    margin: 8px 0 var(--s-2);
+    font-size: 20px;
+}
+
+.admin-info-grid,
+.admin-booking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-2);
+}
+
+.admin-info-grid > div,
+.admin-booking-grid > div {
+    padding: var(--s-2);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.admin-info-grid span,
+.admin-booking-grid span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.admin-info-grid strong,
+.admin-booking-grid strong {
+    display: block;
+    color: var(--text);
+    font-size: 12px;
+    word-break: break-word;
+}
+
+.admin-booking-note,
+.admin-invoice-help {
+    margin: var(--s-2) 0 0;
+    color: var(--text-faint);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.admin-repair-issue {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+.admin-repair-form {
+    display: grid;
+    gap: var(--s-2);
+}
+
+.admin-repair-form .field {
+    margin: 0;
+}
+
+.admin-repair-submit {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.admin-repair-history {
+    display: grid;
+}
+
+.admin-history-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-3);
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-history-item:first-child {
+    padding-top: 0;
+}
+
+.admin-history-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admin-history-item strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.admin-history-item p {
+    margin: 0 0 5px;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.admin-history-item small,
+.admin-history-item time {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+}
+
+.admin-history-item time {
+    white-space: nowrap;
+}
+
+.admin-invoice-status {
+    display: grid;
+    gap: 5px;
+}
+
+.admin-invoice-status span {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+.admin-invoice-status strong {
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.admin-invoice-status small {
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+.admin-repair-success {
+    margin-bottom: var(--s-3);
+    padding: var(--s-2);
+    color: var(--ok);
+    background: rgba(59, 165, 93, 0.08);
+    border: 1px solid rgba(59, 165, 93, 0.2);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+}
+
+.admin-repair-errors {
+    margin-bottom: var(--s-3);
+    padding: var(--s-2);
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(229, 57, 53, 0.2);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+}
+
+.admin-repair-errors ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+}
+
+.admin-repair-empty {
+    margin: 0;
+    color: var(--text-faint);
+    font-size: 11px;
+}
+
+@media (max-width: 800px) {
+
+    .admin-repair-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-repair-sidebar {
+        position: static;
+    }
+
+    .admin-repair-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .admin-info-grid,
+    .admin-booking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-repair-head h1 {
+        font-size: 28px;
+    }
+
+    .admin-history-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+}
+/* =========================================================
+   ADMIN REPAIR LIST — 3 COLUMN GRID
+   ========================================================= */
+
+.admin-repair-list {
+    padding: var(--s-6) 0 var(--s-8);
+}
+
+.admin-repair-list-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4);
+    margin-bottom: var(--s-4);
+}
+
+.admin-repair-list-head h1 {
+    margin: 8px 0 10px;
+    font-size: 40px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+}
+
+.admin-repair-list-head p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.admin-repair-count {
+    min-width: 150px;
+    padding: var(--s-2);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-repair-count span {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+}
+
+.admin-repair-count strong {
+    display: block;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 24px;
+    line-height: 1;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.admin-repair-list-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-2);
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.admin-repair-list-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 360px;
+    padding: var(--s-3);
+
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.admin-repair-list-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.admin-repair-list-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s-2);
+
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-repair-list-card-head > div {
+    min-width: 0;
+}
+
+.admin-repair-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 8px;
+}
+
+.ticket-code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.07em;
+}
+
+.admin-repair-card-device-code {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+}
+
+.admin-repair-list-card-head h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1.2;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.admin-repair-list-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--s-2);
+
+    padding: var(--s-2) 0;
+}
+
+.admin-repair-list-info > div,
+.admin-repair-list-date {
+    min-width: 0;
+}
+
+.admin-repair-list-info span,
+.admin-repair-list-date span,
+.admin-repair-list-issue > span,
+.admin-repair-list-footer span {
+    display: block;
+    margin-bottom: 5px;
+
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+}
+
+.admin-repair-list-info strong,
+.admin-repair-list-date strong {
+    display: block;
+
+    color: var(--text);
+    font-size: 10px;
+    line-height: 1.4;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.admin-repair-list-date {
+    padding: var(--s-2) 0;
+
+    border-top: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   ISSUE
+   ========================================================= */
+
+.admin-repair-list-issue {
+    flex: 1;
+
+    padding: var(--s-2) 0;
+
+    border-top: 1px solid var(--border);
+}
+
+.admin-repair-list-issue p {
+    display: -webkit-box;
+
+    margin: 0;
+
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.7;
+
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.admin-repair-list-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-2);
+
+    padding-top: var(--s-2);
+
+    border-top: 1px solid var(--border);
+}
+
+.admin-repair-list-footer strong {
+    display: block;
+
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    line-height: 1.4;
+}
+
+.admin-repair-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--text);
+
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-repair-view span {
+    margin: 0;
+
+    color: var(--accent);
+    font-size: 14px;
+
+    transition: transform 0.2s ease;
+}
+
+.admin-repair-view:hover span {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.admin-repair-list-empty {
+    padding: var(--s-6);
+
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    text-align: center;
+}
+
+.admin-repair-list-empty h2 {
+    margin: 10px 0 7px;
+    font-size: 22px;
+}
+
+.admin-repair-list-empty p {
+    max-width: 480px;
+    margin: 0 auto var(--s-3);
+
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .admin-repair-list-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .admin-repair-list {
+        padding: var(--s-4) 0 var(--s-6);
+    }
+
+    .admin-repair-list-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-repair-list-head h1 {
+        font-size: 32px;
+    }
+
+    .admin-repair-count {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .admin-repair-list-card {
+        min-height: 330px;
+    }
+
+}
+
+@media (max-width: 560px) {
+
+    .admin-repair-list-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-repair-list-card {
+        min-height: 0;
+    }
+
+}
+/* ========================================
+   Admin Dashboard
+   ======================================== */
+
+.admin-dashboard {
+    padding: var(--s-6) 0 var(--s-8);
+}
+
+
+/* Hero */
+
+.admin-dashboard-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-dashboard-hero h1 {
+    margin: 8px 0 12px;
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+}
+
+.admin-dashboard-hero p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.admin-dashboard-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 190px;
+    padding: var(--s-2);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-dashboard-status-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    background: var(--ok);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(59, 165, 93, 0.1);
+}
+
+.admin-dashboard-status strong {
+    display: block;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+}
+
+.admin-dashboard-status small {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-faint);
+    font-size: 9px;
+}
+
+
+/* Statistics */
+
+.admin-dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-2);
+    margin-top: var(--s-3);
+}
+
+.admin-stat-card {
+    min-height: 145px;
+    padding: var(--s-2);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+}
+
+.admin-stat-card:hover {
+    border-color: var(--border-strong);
+}
+
+.admin-stat-active {
+    border-color: rgba(229, 57, 53, 0.28);
+}
+
+.admin-stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-stat-top > span:first-child {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+}
+
+.admin-stat-index {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+}
+
+.admin-stat-value {
+    display: block;
+    margin-top: 28px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 32px;
+    line-height: 1;
+}
+
+.admin-stat-active .admin-stat-value {
+    color: var(--accent);
+}
+
+.admin-stat-card p {
+    margin: 8px 0 0;
+    color: var(--text-faint);
+    font-size: 10px;
+}
+
+
+/* Dashboard Panels */
+
+.admin-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.75fr);
+    gap: var(--s-2);
+    margin-top: var(--s-2);
+}
+
+.admin-dashboard-panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-dashboard-panel-main {
+    padding: var(--s-3);
+}
+
+.admin-dashboard-side {
+    padding: var(--s-3);
+}
+
+.admin-dashboard-panel-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s-2);
+    margin-bottom: var(--s-3);
+}
+
+.admin-dashboard-panel-head h2 {
+    margin: 7px 0 0;
+    font-size: 21px;
+}
+
+.admin-panel-code {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+}
+
+
+/* Operations */
+
+.admin-dashboard-operation {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-2) 0;
+    border-top: 1px solid var(--border);
+}
+
+.admin-operation-number {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 10px;
+}
+
+.admin-operation-content h3 {
+    margin: 0 0 4px;
+    font-size: 13px;
+}
+
+.admin-operation-content p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.admin-operation-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-operation-link span {
+    color: var(--accent);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+}
+
+.admin-operation-link:hover span {
+    transform: translateX(3px);
+}
+
+
+/* Platform */
+
+.admin-platform-block {
+    padding: var(--s-2) 0;
+    border-top: 1px solid var(--border);
+}
+
+.admin-platform-block > span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+}
+
+.admin-platform-block strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+}
+
+.admin-platform-block p {
+    margin: 7px 0 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.7;
+}
+
+.admin-workflow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.admin-workflow span {
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 8px;
+}
+
+.admin-workflow b {
+    color: var(--accent);
+    font-size: 10px;
+}
+
+
+/* Admin Note */
+
+.admin-dashboard-note {
+    margin-top: var(--s-2);
+    padding: var(--s-2);
+    background: var(--accent-dim);
+    border: 1px solid rgba(229, 57, 53, 0.2);
+    border-radius: var(--radius-sm);
+}
+
+.admin-dashboard-note span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+}
+
+.admin-dashboard-note p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+
+/* Bottom CTA */
+
+.admin-dashboard-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-top: var(--s-2);
+    padding: var(--s-3);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-dashboard-cta h2 {
+    margin: 7px 0 0;
+    font-size: 17px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+    .admin-dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .admin-dashboard {
+        padding: var(--s-4) 0 var(--s-6);
+    }
+
+    .admin-dashboard-hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-dashboard-hero h1 {
+        font-size: 34px;
+    }
+
+    .admin-dashboard-status {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .admin-dashboard-operation {
+        grid-template-columns: 30px minmax(0, 1fr);
+    }
+
+    .admin-operation-link {
+        grid-column: 2;
+    }
+
+    .admin-dashboard-cta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .admin-dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================================
+   Admin Service Management
+   ========================================================= */
+
+.admin-service-list {
+    padding: var(--s-6) 0 var(--s-8);
+}
+
+.admin-service-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4);
+    margin-bottom: var(--s-4);
+}
+
+.admin-service-head h1 {
+    margin: 8px 0 10px;
+    font-size: 40px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+}
+
+.admin-service-head p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.admin-service-success {
+    margin-bottom: var(--s-3);
+    padding: var(--s-2);
+    color: var(--ok);
+    background: rgba(59, 165, 93, 0.08);
+    border: 1px solid rgba(59, 165, 93, 0.2);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+}
+
+/* Grid */
+
+.admin-service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-2);
+}
+
+/* Card */
+
+.admin-service-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    padding: var(--s-3);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.admin-service-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+}
+
+/* Card Header */
+
+.admin-service-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s-2);
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-service-card-head > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-service-category {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+}
+
+.admin-service-number {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+}
+
+/* Status */
+
+.admin-service-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.05em;
+}
+
+.admin-service-status i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.admin-service-status.-active {
+    color: var(--ok);
+}
+
+.admin-service-status.-active i {
+    background: var(--ok);
+}
+
+.admin-service-status.-inactive {
+    color: var(--text-faint);
+}
+
+.admin-service-status.-inactive i {
+    background: var(--text-faint);
+}
+
+/* Body */
+
+.admin-service-card-body {
+    flex: 1;
+    padding: var(--s-3) 0;
+}
+
+.admin-service-card-body h2 {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: 21px;
+    line-height: 1.2;
+}
+
+.admin-service-card-body p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.7;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Footer */
+
+.admin-service-card-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-2);
+    padding-top: var(--s-2);
+    border-top: 1px solid var(--border);
+}
+
+.admin-service-price span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+}
+
+.admin-service-price strong {
+    display: block;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+.admin-service-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-service-edit span {
+    color: var(--accent);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+}
+
+.admin-service-edit:hover span {
+    transform: translateX(3px);
+}
+
+/* Empty */
+
+.admin-service-empty {
+    padding: var(--s-6);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.admin-service-empty h2 {
+    margin: 10px 0 7px;
+    font-size: 22px;
+}
+
+.admin-service-empty p {
+    max-width: 480px;
+    margin: 0 auto var(--s-3);
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .admin-service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-service-list {
+        padding: var(--s-4) 0 var(--s-6);
+    }
+
+    .admin-service-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-service-head h1 {
+        font-size: 32px;
+    }
+
+    .admin-service-head .btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 560px) {
+    .admin-service-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-service-card {
+        min-height: 260px;
+    }
+}
+.admin-service-status-form {
+    margin: 0;
+}
+
+.admin-service-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+}
+
+.admin-service-status.-active {
+    color: var(--ok);
+}
+
+.admin-service-status.-active i {
+    background: var(--ok);
+}
+
+.admin-service-status.-inactive {
+    color: var(--text-faint);
+}
+
+.admin-service-status.-inactive i {
+    background: var(--text-faint);
+}
+
+.admin-service-status:hover {
+    opacity: 0.7;
+}
+
+.admin-service-status:focus-visible {
+    outline: 1px solid var(--border-strong);
+    outline-offset: 4px;
+}
+/* =========================================================
+   Admin Dashboard Updates
+   ========================================================= */
+
+.admin-dashboard-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.admin-dashboard-cta-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+}
+
+@media (max-width: 1100px) {
+    .admin-dashboard-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .admin-dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-dashboard-cta-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .admin-dashboard-cta-actions .btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 500px) {
+    .admin-dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+}

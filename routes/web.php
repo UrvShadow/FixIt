@@ -1,14 +1,17 @@
 <?php
 
 use App\Http\Controllers\Admin\RepairRequestController as AdminRepairRequestController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RepairRequestController;
+use App\Http\Controllers\ServiceController;
 use App\Models\Payment;
 use App\Models\RepairRequest;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +26,12 @@ Route::view('/', 'index')->name('home');
 
 Route::get('/device/{device_code}', [DeviceController::class, 'publicShow'])
     ->name('devices.public-show');
+
+Route::get('/services', [ServiceController::class, 'index']) 
+    ->name('services.index'); 
+
+Route::get('/services/{service}', [ServiceController::class, 'show']) 
+    ->name('services.show');
 
 
 /*
@@ -188,29 +197,32 @@ Route::middleware(['auth', 'role:admin'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/dashboard', function () {
+Route::get('/dashboard', function () {
+    return view('admin.dashboard', [
+        'totalUsers' => User::where('role', 'user')->count(),
 
-            return view('admin.dashboard', [
-                'totalUsers' => User::where('role', 'user')->count(),
+        'activeRepairs' => RepairRequest::whereNotIn('status', [
+            'completed',
+            'rejected',
+            'cancelled',
+        ])->count(),
 
-                'activeRepairs' => RepairRequest::whereNotIn('status', [
-                    'completed',
-                    'rejected',
-                    'cancelled',
-                ])->count(),
+        'completedRepairs' => RepairRequest::where(
+            'status',
+            'completed'
+        )->count(),
 
-                'completedRepairs' => RepairRequest::where(
-                    'status',
-                    'completed'
-                )->count(),
+        'totalTransactions' => Payment::where(
+            'status',
+            'paid'
+        )->count(),
 
-                'totalTransactions' => Payment::where(
-                    'status',
-                    'paid'
-                )->count(),
-            ]);
-
-        })->name('dashboard');
+        'activeServices' => Service::where(
+            'is_active',
+            true
+        )->count(),
+    ]);
+})->name('dashboard');
 
 
         /*
@@ -230,4 +242,26 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::post('/repairs/{repair}/invoice', [AdminRepairRequestController::class, 'createInvoice'])
             ->name('repairs.create-invoice');
+        /*
+        |--------------------------------------------------------------------------
+        | Service Management
+        |--------------------------------------------------------------------------
+        */ 
+        Route::get('/services', [AdminServiceController::class, 'index'])
+            ->name('services.index');
+
+        Route::get('/services/create', [AdminServiceController::class, 'create'])
+            ->name('services.create');
+
+        Route::post('/services', [AdminServiceController::class, 'store'])
+            ->name('services.store');
+
+        Route::get('/services/{service}/edit', [AdminServiceController::class, 'edit'])
+            ->name('services.edit');
+
+        Route::put('/services/{service}', [AdminServiceController::class, 'update'])
+            ->name('services.update');
+
+        Route::patch('/services/{service}/toggle', [AdminServiceController::class, 'toggleStatus']) 
+            ->name('services.toggle');
     });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -146,6 +147,66 @@
                             @csrf
 
 
+                            {{-- Selected Service --}}
+                            @if ($service)
+
+                                <div class="repair-selected-service">
+
+                                    <div>
+
+                                        <span class="repair-selected-service-label">
+                                            SELECTED SERVICE
+                                        </span>
+
+                                        <strong>
+                                            {{ $service->name }}
+                                        </strong>
+
+                                        <p>
+                                            Starting from
+                                            Rp {{ number_format($service->starting_price, 0, ',', '.') }}
+                                        </p>
+
+                                    </div>
+
+                                    <a
+                                        href="{{ route('services.index') }}"
+                                        class="repair-selected-service-change"
+                                    >
+                                        Change
+                                    </a>
+
+                                </div>
+
+                                <input
+                                    type="hidden"
+                                    name="service_id"
+                                    value="{{ $service->id }}"
+                                >
+
+                            @endif
+
+{{-- Preferred Service Date --}}
+<div class="field">
+
+    <label for="preferred_date">
+        Preferred Service Date
+    </label>
+
+    <input
+        type="date"
+        id="preferred_date"
+        name="preferred_date"
+        value="{{ old('preferred_date') }}"
+        min="{{ now()->format('Y-m-d') }}"
+    >
+
+    <small class="field-help">
+        Choose your preferred date for the repair service.
+        The final schedule will be confirmed by our service team.
+    </small>
+
+</div>
                             {{-- Device --}}
                             <div class="field">
 
@@ -235,27 +296,29 @@
 
                 </div>
 
+
+                {{-- Repair Flow --}}
                 <div class="repair-flow">
 
-    <div class="repair-flow-line"></div>
+                    <div class="repair-flow-line"></div>
 
-    <div class="repair-flow-step">
-        <span class="repair-flow-dot"></span>
-        <span class="repair-flow-label">REQUEST</span>
-    </div>
+                    <div class="repair-flow-step">
+                        <span class="repair-flow-dot"></span>
+                        <span class="repair-flow-label">REQUEST</span>
+                    </div>
 
-    <div class="repair-flow-arrow">
-        →
-    </div>
+                    <div class="repair-flow-arrow">
+                        →
+                    </div>
 
-    <div class="repair-flow-step">
-        <span class="repair-flow-dot"></span>
-        <span class="repair-flow-label">SERVICE</span>
-    </div>
+                    <div class="repair-flow-step">
+                        <span class="repair-flow-dot"></span>
+                        <span class="repair-flow-label">SERVICE</span>
+                    </div>
 
-    <div class="repair-flow-line"></div>
+                    <div class="repair-flow-line"></div>
 
-</div>
+                </div>
 
 
                 {{-- Side Panel --}}
@@ -388,4 +451,5 @@
     </section>
 
 </body>
+
 </html>

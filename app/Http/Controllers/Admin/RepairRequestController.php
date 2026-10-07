@@ -13,7 +13,7 @@ class RepairRequestController extends Controller
 {
     public function index(): View
     {
-        $repairRequests = RepairRequest::with(['user', 'device'])
+        $repairRequests = RepairRequest::with(['user', 'device', 'service'])
             ->latest()
             ->get();
 
@@ -25,6 +25,7 @@ class RepairRequestController extends Controller
         $repair->load([
             'user',
             'device',
+            'service',
             'repairHistories.createdBy',
         ]);
 
