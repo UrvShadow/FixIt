@@ -33,10 +33,10 @@
         <div class="container">
 
             <a
-                href="{{ route('home') }}"
+                href="{{ route('admin.dashboard') }}"
                 class="brand"
             >
-                <span class="mark">FX</span>FixIT
+                <span class="mark">FX</span>FixIT Admin
             </a>
 
             <nav class="nav-links">
@@ -58,6 +58,10 @@
 
                 <a href="{{ route('admin.promos.index') }}">
                     Promos
+                </a>
+
+                <a href="{{ route('admin.financial-reports') }}">
+                    Financial Reports
                 </a>
 
             </nav>

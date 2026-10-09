@@ -11,14 +11,51 @@ use Illuminate\View\View;
 class ServiceController extends Controller
 {
     /**
-     * Display all services.
+     * Display and search services.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $services = Service::orderBy('name')->get();
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'status' => ['nullable', 'in:active,inactive'],
+        ]);
 
-        return view('admin.services.index', compact('services'));
+        $search = trim($validated['search'] ?? '');
+        $status = $validated['status'] ?? '';
+
+        $query = Service::query();
+
+        // Search by service name, description, category, or slug.
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $term = '%' . $search . '%';
+
+                $q->where('name', 'like', $term)
+                    ->orWhere('description', 'like', $term)
+                    ->orWhere('category', 'like', $term)
+                    ->orWhere('slug', 'like', $term);
+            });
+        }
+
+        // Filter by availability.
+        if ($status === 'active') {
+            $query->where('is_active', true);
+        } elseif ($status === 'inactive') {
+            $query->where('is_active', false);
+        }
+
+        $services = $query
+            ->orderBy('name')
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('admin.services.index', compact(
+            'services',
+            'search',
+            'status'
+        ));
     }
+
 
     /**
      * Show create form.
@@ -27,6 +64,7 @@ class ServiceController extends Controller
     {
         return view('admin.services.create');
     }
+
 
     /**
      * Store a new service.
@@ -39,31 +77,26 @@ class ServiceController extends Controller
                 'string',
                 'max:100',
             ],
-
             'slug' => [
                 'required',
                 'string',
                 'max:120',
                 'unique:services,slug',
             ],
-
             'category' => [
                 'required',
                 'string',
                 'max:50',
             ],
-
             'description' => [
                 'required',
                 'string',
             ],
-
             'starting_price' => [
                 'required',
                 'numeric',
                 'min:0',
             ],
-
             'is_active' => [
                 'nullable',
                 'boolean',
@@ -84,6 +117,7 @@ class ServiceController extends Controller
             ->with('success', 'Service berhasil ditambahkan.');
     }
 
+
     /**
      * Show edit form.
      */
@@ -91,6 +125,7 @@ class ServiceController extends Controller
     {
         return view('admin.services.edit', compact('service'));
     }
+
 
     /**
      * Update an existing service.
@@ -105,31 +140,26 @@ class ServiceController extends Controller
                 'string',
                 'max:100',
             ],
-
             'slug' => [
                 'required',
                 'string',
                 'max:120',
                 'unique:services,slug,' . $service->id,
             ],
-
             'category' => [
                 'required',
                 'string',
                 'max:50',
             ],
-
             'description' => [
                 'required',
                 'string',
             ],
-
             'starting_price' => [
                 'required',
                 'numeric',
                 'min:0',
             ],
-
             'is_active' => [
                 'nullable',
                 'boolean',
@@ -150,17 +180,31 @@ class ServiceController extends Controller
             ->with('success', 'Service berhasil diperbarui.');
     }
 
+
     /**
      * Toggle service availability.
+     * Preserve the current search and status filters.
      */
-    public function toggleStatus(Service $service): RedirectResponse
-    {
+    public function toggleStatus(
+        Request $request,
+        Service $service
+    ): RedirectResponse {
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'status' => ['nullable', 'in:active,inactive'],
+        ]);
+
         $service->update([
             'is_active' => ! $service->is_active,
         ]);
 
+        $query = array_filter(
+            $filters,
+            static fn ($value) => $value !== null && $value !== ''
+        );
+
         return redirect()
-            ->route('admin.services.index')
+            ->route('admin.services.index', $query)
             ->with(
                 'success',
                 $service->is_active

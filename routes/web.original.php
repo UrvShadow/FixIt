@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Http\Controllers\Admin\FinancialReportController as AdminFinancialController;
@@ -26,24 +25,26 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    $services = Service::query()
-        ->where('is_active', true)
-        ->orderBy('name')
-        ->take(4)
-        ->get();
-
-    return view('index', compact('services'));
-})->name('home');
+Route::view('/', 'index')->name('home');
 
 Route::get('/device/{device_code}', [DeviceController::class, 'publicShow'])
     ->name('devices.public-show');
 
-Route::get('/services', [ServiceController::class, 'index'])
-    ->name('services.index');
+Route::get('/services', [ServiceController::class, 'index']) 
+    ->name('services.index'); 
 
-Route::get('/services/{service}', [ServiceController::class, 'show'])
+Route::get('/services/{service}', [ServiceController::class, 'show']) 
     ->name('services.show');
+
+Route::get('/', function () { 
+    $services = Service::query() 
+        ->where('is_active', true) 
+        ->orderBy('name') 
+        ->take(4) 
+        ->get(); 
+        
+    return view('index', compact('services')); 
+})->name('home');
 
 
 /*
@@ -53,6 +54,7 @@ Route::get('/services/{service}', [ServiceController::class, 'show'])
 */
 
 Route::middleware('guest')->group(function () {
+
     Route::get('/login', [AuthController::class, 'showLogin'])
         ->name('login');
 
@@ -165,7 +167,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/payments/{invoice}/bank-transfer/verify', [PaymentController::class, 'processBankTransfer'])
         ->name('payments.bank-transfer.verify');
 
-
     /*
     |--------------------------------------------------------------------------
     | Promo
@@ -175,7 +176,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/invoices/{invoice}/promo', [PromoController::class, 'apply'])
         ->name('invoices.promo.apply');
 
-
     /*
     |--------------------------------------------------------------------------
     | Repair Detail
@@ -184,7 +184,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
     Route::get('/repairs/{repair}', [RepairRequestController::class, 'show'])
         ->name('repairs.show');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -215,70 +214,38 @@ Route::middleware(['auth', 'role:admin'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/dashboard', function () {
+Route::get('/dashboard', function () {
+    return view('admin.dashboard', [
+        'totalUsers' => User::where('role', 'user')->count(),
 
-            // Platform statistics
-            $totalUsers = User::where('role', 'user')->count();
+        'activeRepairs' => RepairRequest::whereNotIn('status', [
+            'completed',
+            'rejected',
+            'cancelled',
+        ])->count(),
 
-            $activeRepairs = RepairRequest::whereNotIn('status', [
-                'completed',
-                'rejected',
-                'cancelled',
-            ])->count();
+        'completedRepairs' => RepairRequest::where(
+            'status',
+            'completed'
+        )->count(),
 
-            $completedRepairs = RepairRequest::where(
-                'status',
-                'completed'
-            )->count();
+        'totalTransactions' => Payment::where(
+            'status',
+            'paid'
+        )->count(),
 
-            $totalTransactions = Payment::where(
-                'status',
-                'paid'
-            )->count();
-
-            $activeServices = Service::where(
-                'is_active',
-                true
-            )->count();
-
-
-            // Financial summary for the current month
-            $monthStart = now()->startOfMonth();
-            $now = now();
-
-            $monthlyPaymentsQuery = Payment::query()
-                ->where('status', 'paid')
-                ->whereNotNull('paid_at')
-                ->whereBetween('paid_at', [$monthStart, $now]);
-
-            $monthlyRevenue = (clone $monthlyPaymentsQuery)
-                ->sum('amount');
-
-            $monthlyTransactions = (clone $monthlyPaymentsQuery)
-                ->count();
-
-
-            return view('admin.dashboard', [
-                'totalUsers' => $totalUsers,
-                'activeRepairs' => $activeRepairs,
-                'completedRepairs' => $completedRepairs,
-                'totalTransactions' => $totalTransactions,
-                'activeServices' => $activeServices,
-
-                // Financial summary
-                'monthlyRevenue' => $monthlyRevenue,
-                'monthlyTransactions' => $monthlyTransactions,
-            ]);
-
-        })->name('dashboard');
-
+        'activeServices' => Service::where(
+            'is_active',
+            true
+        )->count(),
+    ]);
+})->name('dashboard');
 
         /*
         |--------------------------------------------------------------------------
         | Service Management
         |--------------------------------------------------------------------------
-        */
-
+        */ 
         Route::get('/services', [AdminServiceController::class, 'index'])
             ->name('services.index');
 
@@ -294,15 +261,14 @@ Route::middleware(['auth', 'role:admin'])
         Route::put('/services/{service}', [AdminServiceController::class, 'update'])
             ->name('services.update');
 
-        Route::patch('/services/{service}/toggle', [AdminServiceController::class, 'toggleStatus'])
+        Route::patch('/services/{service}/toggle', [AdminServiceController::class, 'toggleStatus']) 
             ->name('services.toggle');
-
 
         /*
         |--------------------------------------------------------------------------
         | Promo Management
         |--------------------------------------------------------------------------
-        */
+        */ 
 
         Route::get('/promos', [AdminPromoController::class, 'index'])
             ->name('promos.index');
@@ -322,7 +288,6 @@ Route::middleware(['auth', 'role:admin'])
         Route::patch('/promos/{promo}/toggle', [AdminPromoController::class, 'toggleStatus'])
             ->name('promos.toggle');
 
-
         /*
         |--------------------------------------------------------------------------
         | Repair Management
@@ -341,16 +306,11 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/repairs/{repair}/invoice', [AdminRepairRequestController::class, 'createInvoice'])
             ->name('repairs.create-invoice');
 
-
         /*
         |--------------------------------------------------------------------------
-        | Financial Reports
+        | Financial Report
         |--------------------------------------------------------------------------
         */
-
-        Route::get('/financial-reports', [
-            AdminFinancialController::class,
-            'index',
-        ])->name('financial-reports');
-
+        Route::get('/financial-reports', [AdminFinancialController::class,'index',])
+            ->name('financial-reports');
     });
