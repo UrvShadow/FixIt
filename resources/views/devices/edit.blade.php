@@ -12,32 +12,70 @@
 
 <body>
 
-    {{-- Navbar --}}
-    <header class="nav">
-        <div class="container">
 
-            <a href="{{ route('home') }}" class="brand">
-                <span class="mark">FX</span>FixIT
-            </a>
+{{-- Navbar --}}
+<header class="nav">
+    <div class="container">
 
-            <nav class="nav-links">
-                <a href="{{ route('dashboard') }}">Dashboard</a>
-                <a href="{{ route('devices.index') }}">Devices</a>
-                <a href="{{ route('repairs.index') }}">Repairs</a>
-            </nav>
+        <a href="{{ route('home') }}" class="brand">
+            <span class="mark">FX</span>
+            FixIT
+        </a>
 
-            <div class="nav-actions">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
+        <nav class="nav-links">
+            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('services.index') }}">Services</a>
+            <a href="{{ route('dashboard') }}">Dashboard</a>
+            <a href="{{ route('devices.index') }}">Devices</a>
+            <a href="{{ route('repairs.index') }}">Repairs</a>
+        </nav>
 
-                    <button type="submit" class="btn -secondary -sm">
-                        Log out
-                    </button>
-                </form>
-            </div>
+        <div class="nav-actions">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
 
+                <button type="submit" class="btn -secondary -sm">
+                    Log out
+                </button>
+            </form>
         </div>
-    </header>
+
+        <button
+            type="button"
+            class="nav-toggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div>
+
+    {{-- Mobile Navigation --}}
+    <nav class="nav-mobile">
+        <a href="{{ route('home') }}">Home</a>
+        <a href="{{ route('home') }}#services">Services</a>
+        <a href="{{ route('dashboard') }}">Dashboard</a>
+        <a href="{{ route('devices.index') }}">Devices</a>
+        <a href="{{ route('repairs.index') }}">Repairs</a>
+
+        <div class="nav-mobile-actions">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+
+                <button
+                    type="submit"
+                    class="btn -secondary -sm -block"
+                >
+                    Log out
+                </button>
+            </form>
+        </div>
+    </nav>
+</header>
+
 
     {{-- Edit Device --}}
     <section>

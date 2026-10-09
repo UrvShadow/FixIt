@@ -209,6 +209,56 @@
             font-weight: bold;
         }
 
+        .amount-breakdown {
+    margin-top: 12px;
+
+    width: 280px;
+
+    margin-left: auto;
+
+    font-size: 11px;
+}
+
+.amount-row {
+    display: table;
+
+    width: 100%;
+
+    margin-bottom: 5px;
+}
+
+.amount-row:last-child {
+    margin-bottom: 0;
+}
+
+.amount-row-label,
+.amount-row-value {
+    display: table-cell;
+}
+
+.amount-row-value {
+    text-align: right;
+
+    font-weight: bold;
+}
+
+.amount-promo {
+    color: #278a4b;
+}
+
+.amount-divider {
+    height: 1px;
+
+    margin: 9px 0;
+
+    background: #dddddd;
+}
+
+.amount-total {
+    font-size: 13px;
+    font-weight: bold;
+}
+
 
         /* ========================================
            Payment
@@ -506,20 +556,65 @@
 
 
     {{-- ========================================
-         Total
-         ======================================== --}}
+     Total
+     ======================================== --}}
 
-    <div class="amount-section">
+<div class="amount-section">
 
-        <div class="amount-label">
-            Total Amount
+    <div class="amount-label">
+        Amount Summary
+    </div>
+
+    <div class="amount-breakdown">
+
+        <div class="amount-row">
+
+            <span class="amount-row-label">
+                Subtotal
+            </span>
+
+            <span class="amount-row-value">
+                Rp {{ number_format($invoice->subtotal_amount, 0, ',', '.') }}
+            </span>
+
         </div>
 
-        <div class="amount">
-            Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}
+
+        @if ($invoice->promo_code)
+
+            <div class="amount-row amount-promo">
+
+                <span class="amount-row-label">
+                    Promo {{ $invoice->promo_code }}
+                </span>
+
+                <span class="amount-row-value">
+                    -Rp {{ number_format($invoice->discount_amount, 0, ',', '.') }}
+                </span>
+
+            </div>
+
+        @endif
+
+
+        <div class="amount-divider"></div>
+
+
+        <div class="amount-row amount-total">
+
+            <span class="amount-row-label">
+                Total Amount
+            </span>
+
+            <span class="amount-row-value">
+                Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}
+            </span>
+
         </div>
 
     </div>
+
+</div>
 
 
     {{-- ========================================

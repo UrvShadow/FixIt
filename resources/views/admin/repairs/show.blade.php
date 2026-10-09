@@ -46,14 +46,18 @@
                 </a>
 
                 <a
-                    href="{{ route('admin.repairs.index') }}"
+                    href="{{ route('admin.services.index') }}">
+                    Services
+                </a>
+
+                <a href="{{ route('admin.repairs.index') }}"
                     class="active"
                 >
                     Repairs
                 </a>
 
-                <a href="{{ route('admin.services.index') }}">
-                    Services
+                <a href="{{ route('admin.promos.index') }}">
+                    Promos
                 </a>
 
             </nav>

@@ -15,64 +15,86 @@
 
     {{-- Navbar --}}
     <header class="nav">
-
         <div class="container">
 
             <a href="{{ route('home') }}" class="brand">
                 <span class="mark">FX</span>FixIT
             </a>
 
-            <nav class="nav-links">
-
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('devices.index') }}">
-                    Devices
-                </a>
-
-                <a href="{{ route('repairs.index') }}">
-                    Repairs
-                </a>
-
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="{{ route('home') }}">Home</a>
+                <a href="{{ route('services.index') }}">Services</a>
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+                <a href="{{ route('devices.index') }}">Devices</a>
+                <a href="{{ route('repairs.index') }}">Repairs</a>
             </nav>
 
             <div class="nav-actions">
 
-                <form action="{{ route('logout') }}" method="POST">
+                <form
+                    class="nav-desktop-logout"
+                    action="{{ route('logout') }}"
+                    method="POST"
+                >
                     @csrf
 
-                    <button
-                        type="submit"
-                        class="btn -secondary -sm"
-                    >
+                    <button type="submit" class="btn -secondary -sm">
                         Log out
                     </button>
                 </form>
 
-            </div>
+                <button
+                    type="button"
+                    class="nav-toggle"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false"
+                    aria-controls="repair-mobile-nav"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
+            </div>
         </div>
 
+        {{-- Mobile Navigation --}}
+        <nav
+            class="nav-mobile"
+            id="repair-mobile-nav"
+            aria-label="Mobile navigation"
+        >
+            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('services.index') }}">Services</a>
+            <a href="{{ route('dashboard') }}">Dashboard</a>
+            <a href="{{ route('devices.index') }}">Devices</a>
+            <a href="{{ route('repairs.index') }}">Repairs</a>
+
+            <div class="nav-mobile-actions">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+
+                    <button type="submit" class="btn -secondary -sm">
+                        Log out
+                    </button>
+                </form>
+            </div>
+        </nav>
     </header>
 
 
     {{-- Repair Detail --}}
-    <section>
-
+    <section class="repair-detail-page">
         <div class="container">
 
             {{-- Back --}}
             <div class="repair-detail-back">
-
                 <a
                     href="{{ route('repairs.index') }}"
                     class="btn -ghost -sm"
                 >
                     ← My Repairs
                 </a>
-
             </div>
 
 
@@ -80,19 +102,15 @@
             <div class="repair-detail-head">
 
                 <div>
-
                     <span class="ticket-code">
                         REPAIR #{{ $repair->id }}
                     </span>
 
-                    <h1>
-                        {{ $repair->device->name }}
-                    </h1>
+                    <h1>{{ $repair->device->name }}</h1>
 
                     <span class="repair-device-code">
                         {{ $repair->device->device_code }}
                     </span>
-
                 </div>
 
                 <span class="status-badge status-{{ $repair->status }}">
@@ -105,10 +123,8 @@
             {{-- Main Layout --}}
             <div class="repair-detail-layout">
 
-
                 {{-- Main Content --}}
                 <main class="repair-detail-main">
-
 
                     {{-- Reported Problem --}}
                     <article class="repair-detail-card">
@@ -117,13 +133,9 @@
                             Reported Problem
                         </div>
 
-                        <h2>
-                            Issue Description
-                        </h2>
+                        <h2>Issue Description</h2>
 
-                        <p class="repair-detail-issue">
-                            {{ $repair->issue }}
-                        </p>
+                        <p class="repair-detail-issue">{{ $repair->issue }}</p>
 
                     </article>
 
@@ -135,14 +147,14 @@
                             Service Progress
                         </div>
 
-                        <h2>
-                            Repair Timeline
-                        </h2>
-
+                        <h2>Repair Timeline</h2>
 
                         <div class="repair-detail-timeline">
 
-                            @forelse ($repair->repairHistories as $history)
+                            @forelse (
+                                $repair->repairHistories->sortByDesc('created_at')
+                                as $history
+                            )
 
                                 @php
                                     $isLatest = $loop->first;
@@ -160,7 +172,6 @@
                                 <div class="timeline-item {{ $timelineClass }}">
 
                                     <div class="timeline-marker">
-
                                         @if ($isFailed)
                                             ×
                                         @elseif ($isLatest)
@@ -168,34 +179,24 @@
                                         @else
                                             ✓
                                         @endif
-
                                     </div>
-
 
                                     <div class="timeline-content">
 
                                         <div>
-
                                             <strong>
                                                 {{ ucfirst(str_replace('_', ' ', $history->status)) }}
                                             </strong>
 
                                             @if ($history->note)
-
-                                                <p>
-                                                    {{ $history->note }}
-                                                </p>
-
+                                                <p>{{ $history->note }}</p>
                                             @endif
 
                                             @if ($history->createdBy)
-
                                                 <small>
                                                     Updated by {{ $history->createdBy->name }}
                                                 </small>
-
                                             @endif
-
                                         </div>
 
                                         <span>
@@ -203,7 +204,6 @@
                                         </span>
 
                                     </div>
-
                                 </div>
 
                             @empty
@@ -215,7 +215,6 @@
                             @endforelse
 
                         </div>
-
                     </article>
 
                 </main>
@@ -224,8 +223,7 @@
                 {{-- Sidebar --}}
                 <aside class="repair-detail-sidebar">
 
-
-                    {{-- Cost Summary --}}
+                    {{-- Cost Summary and Payment --}}
                     <article class="repair-detail-card repair-cost-card">
 
                         <div class="section-tag">
@@ -235,50 +233,40 @@
                         <div class="repair-cost-list">
 
                             <div class="repair-cost-row">
-
-                                <span>
-                                    Estimated Cost
-                                </span>
+                                <span>Estimated Cost</span>
 
                                 <strong>
-                                    @if ($repair->estimated_cost)
+                                    @if ($repair->estimated_cost !== null)
                                         Rp {{ number_format($repair->estimated_cost, 0, ',', '.') }}
                                     @else
                                         —
                                     @endif
                                 </strong>
-
                             </div>
 
-
                             <div class="repair-cost-row">
-
-                                <span>
-                                    Final Cost
-                                </span>
+                                <span>Final Cost</span>
 
                                 <strong class="repair-final-cost">
-
-                                    @if ($repair->final_cost)
+                                    @if ($repair->final_cost !== null)
                                         Rp {{ number_format($repair->final_cost, 0, ',', '.') }}
                                     @else
                                         —
                                     @endif
-
                                 </strong>
-
                             </div>
 
                         </div>
 
 
-                        {{-- Invoice --}}
+                        {{-- Download Invoice --}}
                         @if ($repair->invoice && $repair->invoice->status === 'paid')
 
                             <a
                                 href="{{ route('invoices.download', $repair->invoice) }}"
                                 class="btn -secondary invoice-download-button"
                                 target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 Download Invoice PDF
                             </a>
@@ -291,9 +279,7 @@
 
                             <div class="repair-payment-state">
 
-                                <span>
-                                    Invoice
-                                </span>
+                                <span>Invoice</span>
 
                                 <strong>
                                     {{ $repair->invoice->invoice_number }}
@@ -336,7 +322,7 @@
                     </article>
 
 
-                    {{-- Service Information --}}
+                    {{-- Booking Information --}}
                     @if ($repair->service || $repair->preferred_date)
 
                         <article class="repair-detail-card">
@@ -350,9 +336,7 @@
                                 <div class="repair-booking-info">
 
                                     <div>
-                                        <span>
-                                            Service
-                                        </span>
+                                        <span>Service</span>
 
                                         <strong>
                                             {{ $repair->service->name }}
@@ -360,9 +344,7 @@
                                     </div>
 
                                     <div>
-                                        <span>
-                                            Starting Price
-                                        </span>
+                                        <span>Starting Price</span>
 
                                         <strong>
                                             Rp {{ number_format($repair->service->starting_price, 0, ',', '.') }}
@@ -373,14 +355,11 @@
 
                             @endif
 
-
                             @if ($repair->preferred_date)
 
                                 <div class="repair-booking-date">
 
-                                    <span>
-                                        Preferred Service Date
-                                    </span>
+                                    <span>Preferred Service Date</span>
 
                                     <strong>
                                         {{ $repair->preferred_date->format('d M Y') }}
@@ -406,87 +385,81 @@
                             Device Information
                         </div>
 
-                        <h2>
-                            {{ $repair->device->name }}
-                        </h2>
+                        <h2>{{ $repair->device->name }}</h2>
 
                         <div class="repair-device-info">
 
                             <div>
-                                <span>
-                                    Device Code
-                                </span>
+                                <span>Device Code</span>
 
                                 <strong>
                                     {{ $repair->device->device_code }}
                                 </strong>
                             </div>
 
-
                             <div>
-                                <span>
-                                    Category
-                                </span>
+                                <span>Category</span>
 
                                 <strong>
-                                    {{ $repair->device->category }}
+                                    {{ $repair->device->category ?: '—' }}
                                 </strong>
                             </div>
 
-
                             <div>
-                                <span>
-                                    Brand
-                                </span>
+                                <span>Brand</span>
 
                                 <strong>
-                                    {{ $repair->device->brand }}
+                                    {{ $repair->device->brand ?: '—' }}
                                 </strong>
                             </div>
-
 
                             @if ($repair->device->model)
-
                                 <div>
-                                    <span>
-                                        Model
-                                    </span>
+                                    <span>Model</span>
 
                                     <strong>
                                         {{ $repair->device->model }}
                                     </strong>
                                 </div>
-
                             @endif
 
-
                             @if ($repair->device->serial_number)
-
                                 <div>
-                                    <span>
-                                        Serial Number
-                                    </span>
+                                    <span>Serial Number</span>
 
                                     <strong>
                                         {{ $repair->device->serial_number }}
                                     </strong>
                                 </div>
-
                             @endif
 
                         </div>
-
                     </article>
-
 
                 </aside>
 
             </div>
-
         </div>
-
     </section>
 
-</body>
 
+    {{-- Mobile Navigation Toggle --}}
+    <script>
+        const repairNavToggle = document.querySelector('.nav-toggle');
+        const repairMobileNav = document.querySelector('#repair-mobile-nav');
+
+        if (repairNavToggle && repairMobileNav) {
+            repairNavToggle.addEventListener('click', () => {
+                const isOpen = repairMobileNav.classList.toggle('-open');
+
+                repairNavToggle.setAttribute('aria-expanded', String(isOpen));
+                repairNavToggle.setAttribute(
+                    'aria-label',
+                    isOpen ? 'Close navigation menu' : 'Open navigation menu'
+                );
+            });
+        }
+    </script>
+
+</body>
 </html>

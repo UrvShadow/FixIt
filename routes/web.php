@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\RepairRequestController as AdminRepairRequestController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Auth\AuthController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PromoController;
 use App\Http\Controllers\RepairRequestController;
 use App\Http\Controllers\ServiceController;
 use App\Models\Payment;
@@ -32,6 +34,16 @@ Route::get('/services', [ServiceController::class, 'index'])
 
 Route::get('/services/{service}', [ServiceController::class, 'show']) 
     ->name('services.show');
+
+Route::get('/', function () { 
+    $services = Service::query() 
+        ->where('is_active', true) 
+        ->orderBy('name') 
+        ->take(4) 
+        ->get(); 
+        
+    return view('index', compact('services')); 
+})->name('home');
 
 
 /*
@@ -154,10 +166,14 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/payments/{invoice}/bank-transfer/verify', [PaymentController::class, 'processBankTransfer'])
         ->name('payments.bank-transfer.verify');
 
-    // Legacy / direct payment endpoint
-    Route::post('/payments/{invoice}', [PaymentController::class, 'store'])
-        ->name('payments.store');
+    /*
+    |--------------------------------------------------------------------------
+    | Promo
+    |--------------------------------------------------------------------------
+    */
 
+    Route::post('/invoices/{invoice}/promo', [PromoController::class, 'apply'])
+        ->name('invoices.promo.apply');
 
     /*
     |--------------------------------------------------------------------------
@@ -224,24 +240,6 @@ Route::get('/dashboard', function () {
     ]);
 })->name('dashboard');
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Repair Management
-        |--------------------------------------------------------------------------
-        */
-
-        Route::get('/repairs', [AdminRepairRequestController::class, 'index'])
-            ->name('repairs.index');
-
-        Route::get('/repairs/{repair}', [AdminRepairRequestController::class, 'show'])
-            ->name('repairs.show');
-
-        Route::put('/repairs/{repair}/status', [AdminRepairRequestController::class, 'updateStatus'])
-            ->name('repairs.update-status');
-
-        Route::post('/repairs/{repair}/invoice', [AdminRepairRequestController::class, 'createInvoice'])
-            ->name('repairs.create-invoice');
         /*
         |--------------------------------------------------------------------------
         | Service Management
@@ -264,4 +262,46 @@ Route::get('/dashboard', function () {
 
         Route::patch('/services/{service}/toggle', [AdminServiceController::class, 'toggleStatus']) 
             ->name('services.toggle');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Promo Management
+        |--------------------------------------------------------------------------
+        */ 
+
+        Route::get('/promos', [AdminPromoController::class, 'index'])
+            ->name('promos.index');
+
+        Route::get('/promos/create', [AdminPromoController::class, 'create'])
+            ->name('promos.create');
+
+        Route::post('/promos', [AdminPromoController::class, 'store'])
+            ->name('promos.store');
+
+        Route::get('/promos/{promo}/edit', [AdminPromoController::class, 'edit'])
+            ->name('promos.edit');
+
+        Route::put('/promos/{promo}', [AdminPromoController::class, 'update'])
+            ->name('promos.update');
+
+        Route::patch('/promos/{promo}/toggle', [AdminPromoController::class, 'toggleStatus'])
+            ->name('promos.toggle');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Repair Management
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/repairs', [AdminRepairRequestController::class, 'index'])
+            ->name('repairs.index');
+
+        Route::get('/repairs/{repair}', [AdminRepairRequestController::class, 'show'])
+            ->name('repairs.show');
+
+        Route::put('/repairs/{repair}/status', [AdminRepairRequestController::class, 'updateStatus'])
+            ->name('repairs.update-status');
+
+        Route::post('/repairs/{repair}/invoice', [AdminRepairRequestController::class, 'createInvoice'])
+            ->name('repairs.create-invoice');
     });

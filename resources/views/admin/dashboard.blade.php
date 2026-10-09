@@ -56,6 +56,10 @@
                 Repairs
             </a>
 
+            <a href="{{ route('admin.promos.index') }}">
+                Promos
+            </a>
+
         </nav>
 
         <div class="nav-actions">

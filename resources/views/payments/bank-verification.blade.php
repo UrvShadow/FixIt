@@ -13,48 +13,19 @@
 
 <body>
 
-    <header class="nav">
-
+    {{-- Minimal Payment Header --}}
+    <header class="nav payment-nav">
         <div class="container">
 
-            <a href="{{ route('home') }}" class="brand">
-                <span class="mark">FX</span>FixIT
-            </a>
-
-            <nav class="nav-links">
-
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('devices.index') }}">
-                    Devices
-                </a>
-
-                <a href="{{ route('repairs.index') }}">
-                    Repairs
-                </a>
-
-            </nav>
-
-            <div class="nav-actions">
-
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="btn -secondary -sm"
-                    >
-                        Log out
-                    </button>
-
-                </form>
-
+            <div class="brand" aria-label="FixIT">
+                <span class="mark" aria-hidden="true">FX</span>FixIT
             </div>
 
-        </div>
+            <span class="payment-nav-context">
+                SECURE CHECKOUT
+            </span>
 
+        </div>
     </header>
 
 

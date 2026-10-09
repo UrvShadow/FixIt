@@ -13,52 +13,19 @@
 
 <body>
 
-    {{-- ========================================
-         Navbar
-         ======================================== --}}
-
-    <header class="nav">
-
+    {{-- Minimal Payment Header --}}
+    <header class="nav payment-nav">
         <div class="container">
 
-            <a href="{{ route('home') }}" class="brand">
-                <span class="mark">FX</span>FixIT
-            </a>
-
-            <nav class="nav-links">
-
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('devices.index') }}">
-                    Devices
-                </a>
-
-                <a href="{{ route('repairs.index') }}">
-                    Repairs
-                </a>
-
-            </nav>
-
-            <div class="nav-actions">
-
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="btn -secondary -sm"
-                    >
-                        Log out
-                    </button>
-
-                </form>
-
+            <div class="brand" aria-label="FixIT">
+                <span class="mark" aria-hidden="true">FX</span>FixIT
             </div>
 
-        </div>
+            <span class="payment-nav-context">
+                SECURE CHECKOUT
+            </span>
 
+        </div>
     </header>
 
 
@@ -114,7 +81,8 @@
 
                     <div class="bank-transfer-summary">
 
-                        <div>
+                        <div class="bank-transfer-repair-info">
+
                             <span class="ticket-code">
                                 REPAIR #{{ $repair->id }}
                             </span>
@@ -126,17 +94,64 @@
                             <p>
                                 {{ $repair->invoice->invoice_number }}
                             </p>
+
                         </div>
 
-                        <div class="bank-transfer-amount">
 
-                            <span>
-                                Amount to Pay
-                            </span>
+                        {{-- ========================================
+                             Payment Summary
+                             ======================================== --}}
 
-                            <strong>
-                                Rp {{ number_format($repair->invoice->total_amount, 0, ',', '.') }}
-                            </strong>
+                        <div class="bank-transfer-price-breakdown">
+
+                            <div class="bank-transfer-summary-title">
+                                Payment Summary
+                            </div>
+
+                            <div class="bank-transfer-price-row">
+
+                                <span>
+                                    Subtotal
+                                </span>
+
+                                <strong>
+                                    Rp {{ number_format($repair->invoice->subtotal_amount, 0, ',', '.') }}
+                                </strong>
+
+                            </div>
+
+
+                            @if ($repair->invoice->promo_code)
+
+                                <div class="bank-transfer-price-row bank-transfer-promo-row">
+
+                                    <span>
+                                        Promo {{ $repair->invoice->promo_code }}
+                                    </span>
+
+                                    <strong>
+                                        -Rp {{ number_format($repair->invoice->discount_amount, 0, ',', '.') }}
+                                    </strong>
+
+                                </div>
+
+                            @endif
+
+
+                            <div class="bank-transfer-price-divider"></div>
+
+
+                            <div class="bank-transfer-price-row bank-transfer-total-row">
+
+                                <span>
+                                    Amount to Pay
+                                </span>
+
+                                <strong>
+                                    Rp {{ number_format($repair->invoice->total_amount, 0, ',', '.') }}
+                                </strong>
+
+                            </div>
 
                         </div>
 
@@ -248,7 +263,10 @@
                     </div>
 
 
-                    {{-- Simulation Notice --}}
+                    {{-- ========================================
+                         Simulation Notice
+                         ======================================== --}}
+
                     <div class="payment-method-note">
 
                         <span>
@@ -261,6 +279,7 @@
                         </p>
 
                     </div>
+
 
                 </div>
 

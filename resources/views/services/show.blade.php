@@ -24,12 +24,14 @@
 
             <nav class="nav-links">
                 <a href="{{ route('home') }}">Home</a>
+
                 <a href="{{ route('services.index') }}" class="active">
                     Services
                 </a>
 
                 @auth
                     <a href="{{ route('dashboard') }}">Dashboard</a>
+                    <a href="{{ route('devices.index') }}">Devices</a>
                     <a href="{{ route('repairs.index') }}">Repairs</a>
                 @endauth
             </nav>
@@ -75,7 +77,8 @@
                     href="{{ route('services.index') }}"
                     class="service-detail-back"
                 >
-                    ← All Services
+                    <span aria-hidden="true">←</span>
+                    All Services
                 </a>
 
 
@@ -97,22 +100,51 @@
                         </p>
 
 
+                        {{-- Service Information --}}
                         <div class="service-detail-section">
 
                             <span class="service-detail-label">
-                                SERVICE OVERVIEW
+                                SERVICE INFORMATION
                             </span>
 
-                            <p>
-                                Our {{ strtolower($service->name) }} service
-                                is designed to help diagnose, repair, and
-                                maintain your device with a structured
-                                service process.
-                            </p>
+                            <div class="service-detail-info">
+
+                                <div class="service-detail-info-row">
+                                    <span>
+                                        Category
+                                    </span>
+
+                                    <strong>
+                                        {{ $service->category }}
+                                    </strong>
+                                </div>
+
+                                <div class="service-detail-info-row">
+                                    <span>
+                                        Starting price
+                                    </span>
+
+                                    <strong>
+                                        Rp {{ number_format($service->starting_price, 0, ',', '.') }}
+                                    </strong>
+                                </div>
+
+                                <div class="service-detail-info-row">
+                                    <span>
+                                        Availability
+                                    </span>
+
+                                    <strong class="service-detail-available">
+                                        Available
+                                    </strong>
+                                </div>
+
+                            </div>
 
                         </div>
 
 
+                        {{-- How It Works --}}
                         <div class="service-detail-section">
 
                             <span class="service-detail-label">
@@ -122,36 +154,82 @@
                             <div class="service-detail-steps">
 
                                 <div class="service-detail-step">
-                                    <span>01</span>
+
+                                    <span>
+                                        01
+                                    </span>
+
                                     <div>
-                                        <strong>Book a Service</strong>
+                                        <strong>
+                                            Submit Request
+                                        </strong>
+
                                         <p>
-                                            Submit your device information
-                                            and describe the issue.
+                                            Choose your device and describe
+                                            the issue you are experiencing.
                                         </p>
                                     </div>
+
                                 </div>
 
-                                <div class="service-detail-step">
-                                    <span>02</span>
-                                    <div>
-                                        <strong>Device Diagnosis</strong>
-                                        <p>
-                                            Our service team reviews and
-                                            diagnoses the reported problem.
-                                        </p>
-                                    </div>
-                                </div>
 
                                 <div class="service-detail-step">
-                                    <span>03</span>
+
+                                    <span>
+                                        02
+                                    </span>
+
                                     <div>
-                                        <strong>Repair & Tracking</strong>
+                                        <strong>
+                                            Diagnosis
+                                        </strong>
+
                                         <p>
-                                            Follow the repair progress through
-                                            your FixIT account.
+                                            Your repair request is reviewed
+                                            and the reported issue is diagnosed.
                                         </p>
                                     </div>
+
+                                </div>
+
+
+                                <div class="service-detail-step">
+
+                                    <span>
+                                        03
+                                    </span>
+
+                                    <div>
+                                        <strong>
+                                            Repair
+                                        </strong>
+
+                                        <p>
+                                            The repair process is carried out
+                                            based on the diagnosis and service.
+                                        </p>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="service-detail-step">
+
+                                    <span>
+                                        04
+                                    </span>
+
+                                    <div>
+                                        <strong>
+                                            Payment & Completion
+                                        </strong>
+
+                                        <p>
+                                            Complete the payment process and
+                                            track your repair until completion.
+                                        </p>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -212,7 +290,9 @@
 
                         <div class="service-detail-note">
 
-                            <span>FIXIT SERVICE</span>
+                            <span>
+                                FIXIT SERVICE
+                            </span>
 
                             <p>
                                 All repair requests can be monitored

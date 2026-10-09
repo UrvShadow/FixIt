@@ -28,12 +28,15 @@
 
                 @auth
                     <a href="{{ route('dashboard') }}">Dashboard</a>
+                    <a href="{{ route('devices.index') }}">Devices</a>
                     <a href="{{ route('repairs.index') }}">Repairs</a>
                 @endauth
             </nav>
 
             <div class="nav-actions">
+
                 @auth
+
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
 
@@ -41,7 +44,9 @@
                             Log out
                         </button>
                     </form>
+
                 @else
+
                     <a href="{{ route('login') }}" class="btn -secondary -sm">
                         Log in
                     </a>
@@ -49,7 +54,9 @@
                     <a href="{{ route('register') }}" class="btn -primary -sm">
                         Get Started
                     </a>
+
                 @endauth
+
             </div>
 
         </div>
@@ -66,6 +73,7 @@
                 <div class="service-catalog-head">
 
                     <div>
+
                         <span class="section-tag">
                             OUR SERVICES
                         </span>
@@ -79,9 +87,68 @@
                             Get reliable repair and maintenance services
                             for your laptop, PC, smartphone, and other devices.
                         </p>
+
                     </div>
 
                 </div>
+
+
+                {{-- Service Search --}}
+                <form
+                    action="{{ route('services.index') }}"
+                    method="GET"
+                    class="service-search"
+                >
+
+                    <label for="service-search">
+                        Search services
+                    </label>
+
+                    <div class="service-search-row">
+
+                        <input
+                            type="search"
+                            id="service-search"
+                            name="search"
+                            value="{{ $search }}"
+                            placeholder="Search by service, category, or keyword..."
+                            autocomplete="off"
+                        >
+
+                        <button type="submit" class="btn -primary">
+                            Search
+                        </button>
+
+                        @if ($search !== '')
+                            <a
+                                href="{{ route('services.index') }}"
+                                class="btn -secondary"
+                            >
+                                Clear
+                            </a>
+                        @endif
+
+                    </div>
+
+                </form>
+
+
+                @if ($search !== '')
+
+                    <div class="service-search-result">
+
+                        <span class="section-tag">
+                            SEARCH RESULTS
+                        </span>
+
+                        <p>
+                            Showing results for
+                            <strong>"{{ $search }}"</strong>
+                        </p>
+
+                    </div>
+
+                @endif
 
 
                 @if ($services->count())
@@ -98,7 +165,10 @@
                                         {{ strtoupper($service->category) }}
                                     </span>
 
-                                    <span class="service-card-number">
+                                    <span
+                                        class="service-card-number"
+                                        aria-hidden="true"
+                                    >
                                         {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
                                     </span>
 
@@ -121,11 +191,15 @@
                                 <div class="service-card-footer">
 
                                     <div class="service-card-price">
-                                        <span>Starting from</span>
+
+                                        <span>
+                                            Starting from
+                                        </span>
 
                                         <strong>
                                             Rp {{ number_format($service->starting_price, 0, ',', '.') }}
                                         </strong>
+
                                     </div>
 
                                     <a
@@ -133,7 +207,7 @@
                                         class="service-card-link"
                                     >
                                         View Service
-                                        <span>→</span>
+                                        <span aria-hidden="true">→</span>
                                     </a>
 
                                 </div>
@@ -149,16 +223,41 @@
                     <div class="service-empty">
 
                         <span class="section-tag">
-                            SERVICES
+                            @if ($search !== '')
+                                NO RESULTS
+                            @else
+                                SERVICES
+                            @endif
                         </span>
 
                         <h2>
-                            No services available
+                            @if ($search !== '')
+                                No matching services found
+                            @else
+                                No services available
+                            @endif
                         </h2>
 
                         <p>
-                            Our service catalog is currently being updated.
+                            @if ($search !== '')
+                                We couldn't find a service matching
+                                <strong>"{{ $search }}"</strong>.
+                                Try another keyword or browse the full catalog.
+                            @else
+                                Our service catalog is currently being updated.
+                            @endif
                         </p>
+
+                        @if ($search !== '')
+
+                            <a
+                                href="{{ route('services.index') }}"
+                                class="btn -secondary"
+                            >
+                                Browse All Services
+                            </a>
+
+                        @endif
 
                     </div>
 

@@ -3,60 +3,44 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Choose Payment — FixIT</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ asset('favicon.png') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/style.css') }}"
+    >
 </head>
 
 <body>
 
-    {{-- Navbar --}}
-    <header class="nav">
 
+    {{-- Minimal Payment Header --}}
+    <header class="nav payment-nav">
         <div class="container">
 
-            <a href="{{ route('home') }}" class="brand">
-                <span class="mark">FX</span>FixIT
-            </a>
-
-            <nav class="nav-links">
-
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('devices.index') }}">
-                    Devices
-                </a>
-
-                <a href="{{ route('repairs.index') }}">
-                    Repairs
-                </a>
-
-            </nav>
-
-            <div class="nav-actions">
-
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="btn -secondary -sm"
-                    >
-                        Log out
-                    </button>
-
-                </form>
-
+            {{-- Static Brand: No Navigation Link --}}
+            <div class="brand" aria-label="FixIT">
+                <span class="mark" aria-hidden="true">FX</span>FixIT
             </div>
 
-        </div>
+            <span class="payment-nav-context">
+                PAYMENT
+            </span>
 
+        </div>
     </header>
+
 
 
     {{-- Payment --}}
@@ -118,7 +102,124 @@
                         </span>
 
                         <strong>
-                            Rp {{ number_format($repair->final_cost, 0, ',', '.') }}
+                            Rp {{ number_format($repair->invoice->total_amount, 0, ',', '.') }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                {{-- Promo --}}
+                <div class="payment-promo-section">
+
+                    <div class="section-tag">
+                        Promotion
+                    </div>
+
+                    <h2>
+                        Have a promo code?
+                    </h2>
+
+                    <p class="payment-promo-description">
+                        Apply an eligible promo code before continuing to payment.
+                    </p>
+
+
+                    @if ($errors->has('promo'))
+
+                        <div class="payment-promo-error">
+                            {{ $errors->first('promo') }}
+                        </div>
+
+                    @endif
+
+
+                    @if (session('success'))
+
+                        <div class="payment-promo-success">
+                            {{ session('success') }}
+                        </div>
+
+                    @endif
+
+
+                    <form
+                        action="{{ route('invoices.promo.apply', $repair->invoice) }}"
+                        method="POST"
+                        class="payment-promo-form"
+                    >
+                        @csrf
+
+                        <input
+                            type="text"
+                            name="code"
+                            value="{{ old('code') }}"
+                            placeholder="Enter promo code"
+                            maxlength="50"
+                            autocomplete="off"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn -primary"
+                        >
+                            Apply
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                {{-- Price Breakdown --}}
+                <div class="payment-price-breakdown">
+
+                    <div class="payment-price-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            Rp {{ number_format($repair->invoice->subtotal_amount, 0, ',', '.') }}
+                        </strong>
+
+                    </div>
+
+
+                    @if ($repair->invoice->promo_code)
+
+                        <div class="payment-price-row payment-promo-row">
+
+                            <span>
+                                Promo
+                                <strong>
+                                    {{ $repair->invoice->promo_code }}
+                                </strong>
+                            </span>
+
+                            <strong>
+                                -Rp {{ number_format($repair->invoice->discount_amount, 0, ',', '.') }}
+                            </strong>
+
+                        </div>
+
+                    @endif
+
+
+                    <div class="payment-price-divider"></div>
+
+
+                    <div class="payment-price-row payment-total-row">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            Rp {{ number_format($repair->invoice->total_amount, 0, ',', '.') }}
                         </strong>
 
                     </div>

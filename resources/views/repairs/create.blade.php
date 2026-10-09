@@ -18,41 +18,59 @@
         <div class="container">
 
             <a href="{{ route('home') }}" class="brand">
-                <span class="mark">FX</span>FixIT
+                <span class="mark">FX</span>
+                FixIT
             </a>
 
             <nav class="nav-links">
-
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('devices.index') }}">
-                    Devices
-                </a>
-
-                <a href="{{ route('repairs.index') }}">
-                    Repairs
-                </a>
-
+                <a href="{{ route('home') }}">Home</a>
+                <a href="{{ route('services.index') }}">Services</a>
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+                <a href="{{ route('devices.index') }}">Devices</a>
+                <a href="{{ route('repairs.index') }}">Repairs</a>
             </nav>
 
             <div class="nav-actions">
-
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
 
-                    <button
-                        type="submit"
-                        class="btn -secondary -sm"
-                    >
+                    <button type="submit" class="btn -secondary -sm">
                         Log out
                     </button>
                 </form>
-
             </div>
 
+            <button
+                type="button"
+                class="nav-toggle"
+                aria-label="Open menu"
+                aria-expanded="false"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
         </div>
+
+        {{-- Mobile Navigation --}}
+        <nav class="nav-mobile">
+            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('home') }}#services">Services</a>
+            <a href="{{ route('dashboard') }}">Dashboard</a>
+            <a href="{{ route('devices.index') }}">Devices</a>
+            <a href="{{ route('repairs.index') }}">Repairs</a>
+
+            <div class="nav-mobile-actions">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+
+                    <button type="submit" class="btn -secondary -sm -block">
+                        Log out
+                    </button>
+                </form>
+            </div>
+        </nav>
     </header>
 
 
@@ -186,27 +204,27 @@
 
                             @endif
 
-{{-- Preferred Service Date --}}
-<div class="field">
+                            {{-- Preferred Service Date --}}
+                            <div class="field">
 
-    <label for="preferred_date">
-        Preferred Service Date
-    </label>
+                                <label for="preferred_date">
+                                    Preferred Service Date
+                                </label>
 
-    <input
-        type="date"
-        id="preferred_date"
-        name="preferred_date"
-        value="{{ old('preferred_date') }}"
-        min="{{ now()->format('Y-m-d') }}"
-    >
+                                <input
+                                    type="date"
+                                    id="preferred_date"
+                                    name="preferred_date"
+                                    value="{{ old('preferred_date') }}"
+                                    min="{{ now()->format('Y-m-d') }}"
+                                >
 
-    <small class="field-help">
-        Choose your preferred date for the repair service.
-        The final schedule will be confirmed by our service team.
-    </small>
+                                <small class="field-help">
+                                    Choose your preferred date for the repair service.
+                                    The final schedule will be confirmed by our service team.
+                                </small>
 
-</div>
+                            </div>
                             {{-- Device --}}
                             <div class="field">
 

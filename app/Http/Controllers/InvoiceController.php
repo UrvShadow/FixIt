@@ -17,10 +17,16 @@ class InvoiceController extends Controller
             'repairRequest.user',
             'repairRequest.device',
             'payments',
+            'promo',
         ]);
 
         abort_unless(
             $invoice->repairRequest->user_id === auth()->id(),
+            403
+        );
+
+        abort_unless(
+            $invoice->status === 'paid',
             403
         );
 

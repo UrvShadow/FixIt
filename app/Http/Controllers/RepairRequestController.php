@@ -10,20 +10,71 @@ use Illuminate\View\View;
 
 class RepairRequestController extends Controller
 {
-    public function index(): View
+
+    public function index(Request $request): View
     {
-        $repairRequests = auth()->user()
-            ->repairRequests()
-            ->with([
-                'device',
-                'service',
-            ])
-            ->latest()
+        $user = auth()->user();
+
+        // Devices owned by the logged-in user.
+        $devices = $user->devices()
+            ->orderBy('name')
             ->get();
 
-        return view('repairs.index', compact('repairRequests'));
-    }
+        $statuses = [
+            'pending',
+            'confirmed',
+            'diagnosing',
+            'repairing',
+            'waiting_payment',
+            'paid',
+            'completed',
+            'rejected',
+            'cancelled',
+        ];
 
+        $deviceId = $request->query('device', '');
+        $status = $request->query('status', '');
+        $sort = $request->query('sort', 'newest');
+
+        // Only accept device IDs belonging to this user.
+        $allowedDeviceIds = $devices->modelKeys();
+
+        if (!in_array((string) $deviceId, array_map('strval', $allowedDeviceIds), true)) {
+            $deviceId = '';
+        }
+
+        // Only accept known statuses and sort options.
+        if (!in_array($status, $statuses, true)) {
+            $status = '';
+        }
+
+        if (!in_array($sort, ['newest', 'oldest'], true)) {
+            $sort = 'newest';
+        }
+
+        $repairRequests = $user->repairRequests()
+            ->with(['device', 'service'])
+            ->when($deviceId !== '', function ($query) use ($deviceId) {
+                $query->where('device_id', $deviceId);
+            })
+            ->when($status !== '', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->when($sort === 'oldest', function ($query) {
+                $query->oldest();
+            }, function ($query) {
+                $query->latest();
+            })
+            ->get();
+
+        return view('repairs.index', compact(
+            'repairRequests',
+            'devices',
+            'deviceId',
+            'status',
+            'sort'
+        ));
+    }
     public function show(RepairRequest $repair): View
     {
         abort_unless(

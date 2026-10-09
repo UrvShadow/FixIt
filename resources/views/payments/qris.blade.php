@@ -13,226 +13,286 @@
 
 <body>
 
-    {{-- ========================================
-         Navbar
-         ======================================== --}}
-
-    <header class="nav">
-
+    {{-- Minimal Payment Header --}}
+    <header class="nav payment-nav">
         <div class="container">
 
-            <a href="{{ route('home') }}" class="brand">
-                <span class="mark">FX</span>FixIT
-            </a>
-
-            <nav class="nav-links">
-
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('devices.index') }}">
-                    Devices
-                </a>
-
-                <a href="{{ route('repairs.index') }}">
-                    Repairs
-                </a>
-
-            </nav>
-
-            <div class="nav-actions">
-
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="btn -secondary -sm"
-                    >
-                        Log out
-                    </button>
-
-                </form>
-
+            <div class="brand" aria-label="FixIT">
+                <span class="mark" aria-hidden="true">FX</span>FixIT
             </div>
 
-        </div>
+            <span class="payment-nav-context">
+                SECURE CHECKOUT
+            </span>
 
+        </div>
     </header>
 
 
-    {{-- ========================================
-         QRIS Payment Page
-         ======================================== --}}
-
-    <section>
+    {{-- QRIS Payment Page --}}
+    <main class="payment-qris-page">
 
         <div class="container">
 
-            <div class="payment-page payment-qris-page">
+            {{-- Back --}}
+            <a
+                href="{{ route('payments.create', $repair) }}"
+                class="btn -ghost -sm qris-back"
+            >
+                ← Payment Methods
+            </a>
 
 
-                {{-- Back --}}
-                <a
-                    href="{{ route('payments.create', $repair) }}"
-                    class="btn -ghost -sm qris-back"
-                >
-                    ← Payment Methods
-                </a>
+            @php
+                $invoice = $repair->invoice;
+                $paymentExpiresAt = $invoice->payment_expires_at;
+
+                $qrisSessionActive =
+                    $invoice->payment_method_pending === 'qris'
+                    && $paymentExpiresAt !== null
+                    && $paymentExpiresAt->isFuture();
+            @endphp
 
 
-                {{-- ========================================
-                     QRIS Payment Card
-                     ======================================== --}}
+            {{-- QRIS Payment Card --}}
+            <section class="qris-payment-card">
 
-                <div class="qris-payment-card">
+                {{-- Header --}}
+                <div class="payment-page-head">
 
-
-                    {{-- Payment Header --}}
-                    <div class="payment-page-head">
-
-                        <div class="section-tag">
-                            QRIS
-                        </div>
-
-                        <h1>
-                            Scan to Pay
-                        </h1>
-
-                        <p>
-                            Scan the QR code below using your preferred
-                            banking or e-wallet application.
-                        </p>
-
+                    <div class="section-tag">
+                        QRIS PAYMENT
                     </div>
 
+                    <h1>Scan to Pay</h1>
 
-                    {{-- ========================================
-                         Repair / Invoice Information
-                         ======================================== --}}
+                    <p>
+                        Use your preferred banking or e-wallet application
+                        to scan the simulated payment code.
+                    </p>
 
-                    <div class="qris-payment-info">
+                </div>
 
+
+                {{-- Repair / Invoice Information --}}
+                <div class="qris-payment-info">
+
+                    <div class="qris-payment-reference">
                         <span class="ticket-code">
                             REPAIR #{{ $repair->id }}
                         </span>
 
-                        <h2>
-                            {{ $repair->device->name }}
-                        </h2>
+                        <span class="qris-invoice-label">
+                            {{ $invoice->invoice_number }}
+                        </span>
+                    </div>
 
-                        <p>
-                            {{ $repair->invoice->invoice_number }}
+                    <h2>{{ $repair->device->name }}</h2>
+
+                    <p>
+                        Device code: {{ $repair->device->device_code }}
+                    </p>
+
+                </div>
+
+
+                {{-- Payment Session Countdown --}}
+                @if ($errors->has('payment'))
+                    <div class="payment-session-error" role="alert">
+                        {{ $errors->first('payment') }}
+                    </div>
+                @endif
+
+                <div
+                    class="payment-countdown {{ $qrisSessionActive ? '' : 'is-expired' }}"
+                    data-payment-countdown
+                    data-expires-at="{{ $paymentExpiresAt?->timestamp ?? '' }}"
+                    data-format="minutes"
+                    data-button-target="#qris-paid-button"
+                    data-warning-message="Less than five minutes remain."
+                    data-expired-message="This QRIS session has expired. Return to Payment Methods to start a new session."
+                    role="status"
+                    aria-live="polite"
+                >
+                    <div class="payment-countdown-copy">
+
+                        <span>TIME LEFT TO PAY</span>
+
+                        <p
+                            class="payment-countdown-message"
+                            data-countdown-message
+                        >
+                            @if ($qrisSessionActive)
+                                Complete the payment before this session expires.
+                            @else
+                                This payment session has expired. Return to Payment Methods to start a new session.
+                            @endif
                         </p>
 
                     </div>
 
+                    <strong
+                    class="payment-countdown-value"
+                    data-countdown-value
+                >
+                    {{ $qrisSessionActive ? '--:--' : '00:00' }}
+                </strong>
 
-                    {{-- ========================================
-                         QR Code
-                         ======================================== --}}
+                </div>
 
-                    <div class="qris-code-wrapper">
 
-                        <div class="qris-code">
+                {{-- Simulated QR Code --}}
+                <div class="qris-code-wrapper">
 
-                            <div class="qris-pattern">
+                    <div
+                        class="qris-code"
+                        role="img"
+                        aria-label="Decorative simulated QR pattern. This is not a scannable payment code."
+                    >
 
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
+                        <div class="qris-pattern" aria-hidden="true">
 
-                            </div>
+                            @for ($row = 0; $row < 21; $row++)
+                                @for ($col = 0; $col < 21; $col++)
+
+                                    @php
+                                        $inTopLeft = $row < 7 && $col < 7;
+                                        $inTopRight = $row < 7 && $col >= 14;
+                                        $inBottomLeft = $row >= 14 && $col < 7;
+
+                                        $inFinder = $inTopLeft || $inTopRight || $inBottomLeft;
+
+                                        if ($inFinder) {
+                                            $finderRow = $row >= 14 ? $row - 14 : $row;
+                                            $finderCol = $col >= 14 ? $col - 14 : $col;
+
+                                            $moduleIsFilled =
+                                                $finderRow === 0
+                                                || $finderRow === 6
+                                                || $finderCol === 0
+                                                || $finderCol === 6
+                                                || (
+                                                    $finderRow >= 2
+                                                    && $finderRow <= 4
+                                                    && $finderCol >= 2
+                                                    && $finderCol <= 4
+                                                );
+                                        } else {
+                                            $moduleIsFilled =
+                                                (($row * 7 + $col * 11 + $row * $col * 3) % 13) < 6;
+                                        }
+                                    @endphp
+
+                                    <span class="{{ $moduleIsFilled ? 'is-filled' : '' }}"></span>
+
+                                @endfor
+                            @endfor
 
                         </div>
 
-                        <span class="qris-simulated">
-                            SIMULATED QRIS
-                        </span>
-
                     </div>
 
+                    <span class="qris-simulated">
+                        SIMULATED QRIS · NOT SCANNABLE
+                    </span>
 
-                    {{-- ========================================
-                         Amount
-                         ======================================== --}}
+                    <p class="qris-code-caption">
+                        Payment reference for demonstration purposes only.
+                    </p>
 
-                    <div class="qris-amount">
+                </div>
 
-                        <span>
-                            Amount to Pay
-                        </span>
+
+                {{-- Price Breakdown --}}
+                <div class="qris-price-breakdown">
+
+                    <div class="qris-price-row">
+
+                        <span>Subtotal</span>
 
                         <strong>
-                            Rp {{ number_format($repair->invoice->total_amount, 0, ',', '.') }}
+                            Rp {{ number_format($invoice->subtotal_amount, 0, ',', '.') }}
                         </strong>
 
                     </div>
 
+                    @if ($invoice->promo_code)
 
-                    {{-- ========================================
-                         Actions
-                         ======================================== --}}
+                        <div class="qris-price-row qris-promo-row">
 
-                    <div class="qris-actions">
+                            <span>
+                                Promo {{ $invoice->promo_code }}
+                            </span>
 
-                        <form
-                            action="{{ route('payments.qris.process', $repair->invoice) }}"
-                            method="POST"
-                        >
-                            @csrf
+                            <strong>
+                                −Rp {{ number_format($invoice->discount_amount, 0, ',', '.') }}
+                            </strong>
 
-                            <button
-                                type="submit"
-                                class="btn -primary"
-                            >
-                                I've Paid
-                            </button>
+                        </div>
 
-                        </form>
+                    @endif
 
-                        <a
-                            href="{{ route('payments.create', $repair) }}"
-                            class="btn -ghost"
-                        >
-                            Choose Another Method
-                        </a>
+                    <div class="qris-price-divider"></div>
+
+                    <div class="qris-price-row qris-total-row">
+
+                        <span>Amount to Pay</span>
+
+                        <strong>
+                            Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                {{-- ========================================
-                     Simulation Notice
-                     ======================================== --}}
+                {{-- Simulation Notice --}}
+                <div class="payment-method-note qris-simulation-notice">
 
-                <div class="payment-method-note">
-
-                    <span>
-                        PAYMENT SIMULATION
-                    </span>
+                    <span>PAYMENT SIMULATION</span>
 
                     <p>
-                        This QR code is a simulated payment reference.
+                        This is a simulated payment flow for FixIT.
                         No real QRIS transaction will be processed.
                     </p>
 
                 </div>
 
-            </div>
+
+                {{-- Confirmation --}}
+                <form
+                    action="{{ route('payments.qris.process', $invoice) }}"
+                    method="POST"
+                    class="qris-confirmation-form"
+                >
+                    @csrf
+
+                    <button
+                        type="submit"
+                        id="qris-paid-button"
+                        class="btn -primary qris-paid-button"
+                        {{ $qrisSessionActive ? '' : 'disabled' }}
+                    >
+                        Confirm Simulated Payment
+                    </button>
+
+                    <p class="qris-confirmation-help">
+                        Confirmation will mark this invoice as paid
+                        in the demonstration system.
+                    </p>
+
+                </form>
+
+            </section>
 
         </div>
 
-    </section>
+    </main>
+
+
+    {{-- Payment Countdown --}}
+    <script src="{{ asset('js/payment-countdown.js') }}" defer></script>
 
 </body>
-
 </html>

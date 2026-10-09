@@ -33,15 +33,19 @@
                 Dashboard
             </a>
 
-            <a href="{{ route('admin.repairs.index') }}">
-                Repairs
-            </a>
-
-            <a
-                href="{{ route('admin.services.index') }}"
+            <a href="{{ route('admin.services.index') }}"
                 class="active"
             >
                 Services
+            </a>
+
+            <a
+                href="{{ route('admin.repairs.index') }}">
+                Repairs
+            </a>
+
+            <a href="{{ route('admin.promos.index') }}">
+                Promos
             </a>
         </nav>
 
